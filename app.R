@@ -17,7 +17,7 @@ library(shinyWidgets)
 
 
 source("utils.R")
-load("../data/phecodemap.RData")
+load("phecodemap.RData")
 
 
 ui <- dashboardPage(
