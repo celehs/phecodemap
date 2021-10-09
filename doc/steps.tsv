@@ -1,0 +1,8 @@
+step	element	intro	position	title
+1	NA	<img src='mvp-map-sm.gif' width='175' height='111' />	right	Welcome!
+2	#ui_table	Select a code or a phenotype to display the relevant classification and hierarchical structure.	right	Data
+3	#ui_legend	Legend to allow comparison, ICD-9 and ICD-10-cm codes are shown in separate colors.	left	Legend
+4	#ui_sunb	- <b>Hover</b> on a wedge to see the label of the code.<br/>- <b>Click</b> on a wedge to expand/collaspe the hierarchy.<br/>- Move the mouse to the <b>upper right corner</b>, click <img src='camera-solid.svg' width='14' height='14' /> to download png.	right	Sunburst
+6	#ui_tree	- <b>Hover</b> on a node to see the label of the code.<br/>- <b>Click</b> on a node to expand/collaspe the subtree.<br/>- Set the maxdepth to 9 to see the full tree in Setting.	left	Tree
+7	.box-success > .box-header > .box-tools > .btn-group > .btn	The Controller of the plots: <br/>Set the max-depth of the plots.	left.	Setting
+8	.box-success > .box-header > .box-tools > .btn	Collapse or expand the box.	left	Collapse

@@ -1,0 +1,42 @@
+
+
+
+
+.header-button{
+  background-color: #3c8dbc;
+  color: white;
+  border-color: #2E84B6
+}
+.btn-primary > .header-button:hover{
+  background-color: #4CB1EB;
+  color: white
+}
+
+
+
+
+
+.btn-primary {
+  background-color: #286090;
+  border-color: #204d74;
+}
+
+.btn-primary:hover {
+  background-color: #204d74;
+  border-color: #122b40;
+}
+
+.btn-primary > a {
+  color: #fff;
+}
+
+/*a {
+  color: #fff;
+} */
+
+/*
+#tophecodemap > .btn-primary > a {
+  color: #fff;
+}
+*/
+
