@@ -1,0 +1,16 @@
+template:
+  params:
+    bootswatch: cosmo
+navbar:
+  title: "phecodemap"
+  type: inverse
+  left:
+    - icon: "fa-home"
+      href: index.html  
+    - text: "App instructions"
+      href: articles/main.html  
+    - text: "Reference"
+      href: reference/index.html
+  right:
+    - text: "CELEHS Software"
+      href: https://celehs.github.io

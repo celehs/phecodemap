@@ -1,0 +1,1 @@
+utils::globalVariables(c("phecode", "icdmap", "df_highlight"))

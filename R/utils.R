@@ -62,7 +62,7 @@ buildPath <- function(rootid, icdmap) {
 
   node <- node[!duplicated(node), ]
   node <- rbind(node, data.frame(ids = rootid, labels = rootid, parents = ""))
-  node <- left_join(left_join(node, s_map[, 2:3], by = c("labels" = "ICD_id")),
+  node <- dplyr::left_join(dplyr::left_join(node, s_map[, 2:3], by = c("labels" = "ICD_id")),
     s_map[, 4:5],
     by = c("labels" = "Phecode")
   )
@@ -122,11 +122,11 @@ addColor <- function(nodes_list, plot = "tree"){
   df_color$color[!df_color$class %in% c("ICD-9", "ICD-10-cm")] <- colorlist[4:(nrow(df_color[!df_color$class %in% c("ICD-9", "ICD-10-cm"),])+3)]
 
   df_color$color[grepl("only", df_color$class)] <- colorlist[3]
-  nodes1 <- left_join(nodes1, df_color, by = "class")
+  nodes1 <- dplyr::left_join(nodes1, df_color, by = "class")
   if (plot == "tree"){
     nodes2$color <- "none"
   } else{
-    nodes2 <- left_join(nodes2, nodes1[, c("labels", "color")], by = "labels", keep = FALSE)
+    nodes2 <- dplyr::left_join(nodes2, nodes1[, c("labels", "color")], by = "labels", keep = FALSE)
   }
   return(list(node, nodes1, nodes2))
 }
@@ -141,8 +141,8 @@ dfPlot <- function(nodes_list, plot = "tree"){
   nodes2 <- nodes_list[[3]]
   nodes_color <- rbind(nodes1, nodes2)
 
-  df_plot <- left_join(node, nodes_color[, -2], by = "ids")
-  df_plot <- left_join(df_plot, nodes_color[, c("ids", "newid")], by = c("parents" = "ids"))
+  df_plot <- dplyr::left_join(node, nodes_color[, -2], by = "ids")
+  df_plot <- dplyr::left_join(df_plot, nodes_color[, c("ids", "newid")], by = c("parents" = "ids"))
   df_plot <- df_plot[, c(10, 7, 1, 3, 2, 6, 8, 9)]
   colnames(df_plot) <- c("parents", "ids", "nodepath", "parentpath", "labels", "info", "class","color")
   return(df_plot)
@@ -163,7 +163,7 @@ dfSunburst <- function(nodes_list){
 }
 
 sunburstPlotly <- function(df_plot, maxd = 10) {
-  plot_ly(df_plot,
+  plotly::plot_ly(df_plot,
           ids =~ ids,
           labels =~ labels,
           parents =~ parents,
@@ -181,7 +181,7 @@ sunburstPlotly <- function(df_plot, maxd = 10) {
 treePlot <- function(nodes_list, maxd = 4, collapsed = FALSE) {
   df_plot <- dfPlot(nodes_list, plot = "tree")
   df_plot <- df_plot[sapply(df_plot$nodepath, filterNode, maxd), ]
-  collapsibleTreeNetwork(df_plot,
+  collapsibleTree::collapsibleTreeNetwork(df_plot,
                          attribute = "labels", fill = "color",
                          collapsed = collapsed, tooltip = TRUE,
                          tooltipHtml = "info", width = "100%", height = 1000
@@ -194,7 +194,7 @@ legends <- function(df_sunb){
   df <- df[order(df$class),]
   options(repr.plot.width=6, repr.plot.height=24)
   plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
-  legend("topleft", legend =df$class, pch=16, pt.cex=3, cex=1.5, bty='n',
+  graphics::legend("topleft", legend =df$class, pch=16, pt.cex=3, cex=1.5, bty='n',
          y.intersp=1.3, ncol=2,
          col = df$color)
 }
@@ -245,5 +245,10 @@ classifyNode <- function(x) {
 
 addBlank <- function(x){
   paste(rep(" ", times = x), collapse = "")
+}
+
+
+docFile <- function(file){
+  paste0(app_sys('app/doc/'), file)
 }
 
