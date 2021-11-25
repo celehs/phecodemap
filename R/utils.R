@@ -1,10 +1,6 @@
 
 # color for ICD9s, ICD10s, highlightNode, Phecode
 
-# qual_col_pals = brewer.pal.info[brewer.pal.info$category == 'qual',]
-# 70 colors
-# col_vector = unique(unlist(mapply(brewer.pal, qual_col_pals$maxcolors, rownames(qual_col_pals))))
-
 col_vector <- c("#984EA3", "#FFFF33", "#A65628", "#F781BF",
                 "#FFD92F", "#E5C494", "#B3B3B3",
                 "#DECBE4",
@@ -29,7 +25,6 @@ colorlist <- c("lightblue", "palegreen", "red", "orange", col_vector)
 
 buildPath <- function(rootid, icdmap) {
 
-  # rootid <- "296"
   rootid <- paste0("Phe:", rootid)
   s_map <- icdmap
   s_map$Phecode <- paste0("Phe:", s_map$Phecode)
@@ -154,10 +149,6 @@ dfSunburst <- function(nodes_list){
   dup_nodes <- df_plot$labels[grep("Phe", df_plot$labels)]
   dup_nodes <- unique(dup_nodes[duplicated(dup_nodes)])
   df_plot$linecolor[!df_plot$labels %in% dup_nodes] <- "white"
-  # df_plot$linecolor[df_plot$color == "red"] <- "black"
-  # df_plot$linewidth <- 1
-  # df_plot$linewidth[df_plot$class != "dupnode"] <- 1
-  # df_plot$linecolor[df_plot$color == "red"] <- 3
   df_plot$labels[df_plot$class == "dupnode"] <- ""
   return(df_plot)
 }
@@ -233,7 +224,6 @@ filterNode <- function(x, maxd, pattern = "/") {
 }
 
 # if ICD in the path, class -> ICD_version
-# 如果是ICD_version子节点，class全部定义为ICD_version
 classifyNode <- function(x) {
   all_path <- strsplit(x, "/", fixed = TRUE)[[1]]
   if (grepl("CD", x, fixed = TRUE)) {

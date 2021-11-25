@@ -16,27 +16,10 @@ app_server <- function(Rdata_path){
               options = list(steps=steps[, -1],
                              showBullets = FALSE))})
     
-    # # observeEvent(input$instruct, {
-    #   output$bs_about <- renderUI({
-    #     shinyBS::bsModal(
-    #       id = "instruction", title = "Instruction", trigger = "instruct",
-    #       size = "large",
-    #       h2("test")
-    #       # includeMarkdown(docFile("Documentation.md"))
-    #     )
-    #   })
-    # # })
-      
-      # output$bs_about <- renderUI({
-      #   tagList(
-      #     shinyBS::bsModal("modal", "foo", trigger = "a", "bar"),
-      #     actionButton("a", "Show modal")
-      #   )
-      # })  
-    
-    
     output$ui_table <- renderUI({
-      shinycssloaders::withSpinner(DT::DTOutput("table_phe"), type = 5)
+      shinycssloaders::withSpinner(
+        DT::DTOutput("table_phe"), 
+        type = 5)
     })
     
     phe_id <- reactive({
@@ -73,13 +56,12 @@ app_server <- function(Rdata_path){
                   scrollCollapse = TRUE
                 ),
                 selection = list(mode = "single",
-                                 selected = ifelse(is.na(inputrow()), 1, inputrow()))
+                                 selected = ifelse(
+                                   is.na(inputrow()), 
+                                   1, inputrow()))
       ),
       server = TRUE
     )
-    
-    
-    
     
     # got rootid -----------------------
     
@@ -91,7 +73,6 @@ app_server <- function(Rdata_path){
       gsub("\\..+", "", icdmap$Phecode[s_line], perl = TRUE)
     })
     
-    
     # render plot -----------------------
     
     nodes_list <- reactive({
@@ -101,11 +82,10 @@ app_server <- function(Rdata_path){
     
     height_tree <- reactive({
       node <- nodes_list()[[1]]
-      filtered_node <- node[sapply(node$ids, filterNode, input$maxd_tree), ]
+      filtered_node <- node[sapply(
+        node$ids, filterNode, input$maxd_tree), ]
       paste0(sqrt(nrow(filtered_node)) * 150, "px")
     })
-    
-    
     
     output$ui_sunb <- renderUI({
       if (is.null(input$table_phe_rows_selected)) {
@@ -113,27 +93,28 @@ app_server <- function(Rdata_path){
           "Select 1 row in the table, Please."
         })
       } else {
-        shinycssloaders::withSpinner(plotly::plotlyOutput("sunburst",
-                                 width = "100%", height = "700px"
+        shinycssloaders::withSpinner(
+          plotly::plotlyOutput("sunburst",
+                               width = "100%", 
+                               height = "700px"
         ), type = 5)
       }
     })
-    
-    
+
     output$ui_tree <- renderUI({
       if (is.null(input$table_phe_rows_selected)) {
         textOutput({
           "Select 1 row in the table, Please."
         })
       } else {
-        shinycssloaders::withSpinner(collapsibleTree::collapsibleTreeOutput("tree",
-                                          width = "100%",
-                                          height = height_tree()
+        shinycssloaders::withSpinner(
+          collapsibleTree::collapsibleTreeOutput(
+            "tree",
+            width = "100%",
+            height = height_tree()
         ), type = 5)
       }
     })
-    
-    
     
     output$tree <- collapsibleTree::renderCollapsibleTree({
       treePlot(nodes_list(), input$maxd_tree)
@@ -146,17 +127,16 @@ app_server <- function(Rdata_path){
     output$sunburst <- plotly::renderPlotly({
       sunburstPlotly(df_sunb(), input$maxd_sunburst)
     })
-    
-    
-    
-    
+
     output$ui_legend <- renderUI({
       if (is.null(input$table_phe_rows_selected)) {
         textOutput({
           "Select 1 row in the table, Please."
         })
       } else {
-        shinycssloaders::withSpinner(plotOutput("out_legend", height = "450px"), type = 5)
+        shinycssloaders::withSpinner(
+          plotOutput("out_legend", height = "450px"), 
+          type = 5)
       }
     })
     

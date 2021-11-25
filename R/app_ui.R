@@ -40,14 +40,12 @@ app_ui <- function(request) {
           title = "PheCode Mapping with ICD-9 and ICD-10-cm Codes",
           status = "primary",
           align = "center", collapsible = TRUE,
-          # collapsed = TRUE,
           uiOutput("ui_table")
         ),
         shinydashboardPlus::box(
           width = 4, id = "box_legend",
           title = "Legend", status = "info",
           align = "center", collapsible = TRUE,
-          # collapsed = TRUE,
           uiOutput("ui_legend")
         ),
         
@@ -88,8 +86,6 @@ app_ui <- function(request) {
           ),
           uiOutput("ui_tree")
         ),
-        
-        # uiOutput("bs_about")
         
         shinyBS::bsModal(
           id = "instruction", title = "Instruction", trigger = "instruct",

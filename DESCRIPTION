@@ -18,7 +18,7 @@ Imports:
     rintrojs,
     shinycssloaders,
     shinydashboard,
-    shinydashboardPlus (<= 2.0.2),
+    shinydashboardPlus,
     shinyWidgets
 Depends: R (>= 3.5.0), shiny (>= 1.6.0), shinyBS
 Encoding: UTF-8
