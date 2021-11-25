@@ -10,7 +10,7 @@ app_server <- function(Rdata_path){
   server <- function(input, output, session) {
     load(Rdata_path)
     
-    steps <- readr::read_tsv(docFile("steps.tsv"))
+    steps <- readr::read_tsv(app_sys("app/doc/steps.tsv"))
     observeEvent(input$help, {
       rintrojs::introjs(session,
               options = list(steps=steps[, -1],

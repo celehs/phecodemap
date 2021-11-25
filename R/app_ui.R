@@ -95,7 +95,7 @@ app_ui <- function(request) {
           id = "instruction", title = "Instruction", trigger = "instruct",
           size = "large",
           # h2("test")
-          includeMarkdown(docFile("Documentation.md"))
+          includeMarkdown(app_sys("app/doc/Documentation.md"))
         )
         
       )

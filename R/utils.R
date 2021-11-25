@@ -247,8 +247,3 @@ addBlank <- function(x){
   paste(rep(" ", times = x), collapse = "")
 }
 
-
-docFile <- function(file){
-  paste0(app_sys('app/doc/'), file)
-}
-

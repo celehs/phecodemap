@@ -33,9 +33,8 @@ use *library(phecodemap)* beforehand, instead of directly running
 phecodemap::run\_app(data\_path).
 
 ``` r
-library(shinyBS)
 library(phecodemap)
-run_app(data_path = "the path to the app data (RDS format)")
+run_app(data_path = "the path to the app data (Rada format)")
 ```
 
 ## App instructions

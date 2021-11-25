@@ -44,7 +44,6 @@ This is a basic example which shows you how to run the `phecodemap` app. Remembe
 
 
 ```{r eval=FALSE}
-library(shinyBS)
 library(phecodemap)
 run_app(data_path = "the path to the app data (Rada format)")
 ```

@@ -3,7 +3,7 @@ context("app-function")
 
 library(shinytest)
 
-test_that("run_app('/home/hui/Project/data/phecodemap.RData') works", {
+test_that("run_app('phecodemap.RData') works", {
   # Don't run these tests on the CRAN build servers
   skip_on_cran()
   
