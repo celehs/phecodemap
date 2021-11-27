@@ -1,0 +1,10 @@
+---
+title: "App instructions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{App instructions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+### warnings

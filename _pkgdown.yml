@@ -8,7 +8,9 @@ navbar:
     - icon: "fa-home"
       href: index.html  
     - text: "App instructions"
-      href: articles/main.html  
+      href: articles/main.html   
+    - text: "Troubleshooting"
+      href: articles/trouble.html  
     - text: "Reference"
       href: reference/index.html
   right:

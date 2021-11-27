@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phecodemap</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -86,6 +86,9 @@
 </li>
 <li>
   <a href="../articles/main.html">App instructions</a>
+</li>
+<li>
+  <a href="../articles/trouble.html">Troubleshooting</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -118,7 +121,6 @@
     </div>
 
     <pre class="usage"><span class='fu'>run_app</span><span class='op'>(</span>
-  <span class='va'>Rdata_path</span>,
   onStart <span class='op'>=</span> <span class='cn'>NULL</span>,
   options <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
   enableBookmarking <span class='op'>=</span> <span class='st'>"server"</span>,
@@ -129,10 +131,6 @@
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>Rdata_path</th>
-      <td><p>path to Rdata files.</p></td>
-    </tr>
     <tr>
       <th>onStart</th>
       <td><p>A function that will be called before the app is actually run.

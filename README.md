@@ -34,7 +34,7 @@ phecodemap::run\_app(data\_path).
 
 ``` r
 library(phecodemap)
-run_app(data_path = "the path to the app data (Rada format)")
+run_app()
 ```
 
 ## App instructions
