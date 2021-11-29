@@ -7,7 +7,7 @@
 #' @noRd
 app_server <- function(input, output, session) {
 
-  steps <- readr::read_tsv(app_sys("app/doc/steps.tsv"))
+  steps <- readr::read_tsv(app_sys("app/doc/steps.tsv"), show_col_types = FALSE)
   observeEvent(input$help, {
     rintrojs::introjs(session,
             options = list(steps=steps[, -1],

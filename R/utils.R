@@ -30,7 +30,7 @@ buildPath <- function(rootid, icdmap) {
   s_map$Phecode <- paste0("Phe:", s_map$Phecode)
   s_map <- s_map[grepl(paste0(rootid, "\\..+"), s_map$Phecode, perl = TRUE) | (s_map$Phecode == rootid), ]
 
-  print(paste("s_map:", nrow(s_map)))
+  # print(paste("s_map:", nrow(s_map)))
 
   node_phe <- s_map[, c("Phecode", "Phenotype")]
   node_phe <- node_phe[!duplicated(node_phe), ]
