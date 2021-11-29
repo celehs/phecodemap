@@ -5,33 +5,6 @@
 #' @format A data frame with 106393 rows and 6 variables:
 #' \describe{
 #'   \item{ICD_version}{ICD version, ICD-9 or ICD-10-cm}
-#'   \item{Phecode}{ICD-9 and ICD-10-cm Codes}
-#' }
-#' @source \url{https://phewascatalog.org/}
-"df_highlight"
-
-utils::globalVariables(c("icdmap", "df_highlight", "phecode"))
-
-#' Mappings of PheCodes to ICD codes.
-#'
-#' A dataset containing the mappings of PheCodes to ICD-9 and ICD-10-cm Codes.
-#'
-#' @format A data frame with 106393 rows and 6 variables:
-#' \describe{
-#'   \item{Phecode}{ICD version, ICD-9 or ICD-10-cm}
-#'   \item{row}{ICD-9 and ICD-10-cm Codes}
-#' }
-#' @source \url{https://phewascatalog.org/}
-"phecode"
-
-
-#' Mappings of PheCodes to ICD codes.
-#'
-#' A dataset containing the mappings of PheCodes to ICD-9 and ICD-10-cm Codes.
-#'
-#' @format A data frame with 106393 rows and 6 variables:
-#' \describe{
-#'   \item{ICD_version}{ICD version, ICD-9 or ICD-10-cm}
 #'   \item{ICD_id}{ICD-9 and ICD-10-cm Codes}
 #'   \item{ICD_str}{Description of ICD Codes}
 #'   \item{Phecode}{PheCode ID}
@@ -40,3 +13,5 @@ utils::globalVariables(c("icdmap", "df_highlight", "phecode"))
 #' }
 #' @source \url{https://phewascatalog.org/}
 "icdmap"
+
+utils::globalVariables(c("icdmap"))

@@ -29,8 +29,8 @@ remotes::install_github("celehs/phecodemap")
 This is a basic example which shows you how to run the `phecodemap` app.
 Remember you need to get access to the data and save it to your local
 computer. In order to guarantee some dependencies are loaded, you must
-use *library(phecodemap)* beforehand, instead of directly running
-phecodemap::run\_app(data\_path).
+use `library(phecodemap)` beforehand, instead of directly running
+`phecodemap::run_app()`.
 
 ``` r
 library(phecodemap)

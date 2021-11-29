@@ -61,6 +61,9 @@ usethis::use_test( "app" )
 usethis::use_vignette("phecodemap")
 devtools::build_vignettes()
 
+devtools::document()
+pkgdown::build_site()
+
 ## Code Coverage----
 ## Set the code coverage service ("codecov" or "coveralls")
 usethis::use_coverage()
