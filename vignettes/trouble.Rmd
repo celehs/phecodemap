@@ -7,10 +7,28 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-### warnings
+### lazy-load database '...rdb' is corrupt
 
+Try the following method and re-install the package. 
 
+1) Try restarting your R session (e.g. .rs.restartR() if in RStudio)
+
+2) The package might have been installed in your computer (even though it does not work). Remove it using ?remove.packages()
 
 https://stackoverflow.com/questions/30424608/error-in-fetchkey-lazy-load-database
+
+### Error: (converted from warning) package 'shiny' was build under R version ...
+
+Error converted from warning prevents package install when dependency was built under newer R version.
+
+Setting R_REMOTES_NO_ERRORS_FROM_WARNINGS="false" will cause warning messages during calls to install.packages() to become errors.
+
+Try run the following code and re-install the package. 
+
+```{r}
+Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
+```
+
+https://github.com/r-lib/remotes/issues/403
 
 
