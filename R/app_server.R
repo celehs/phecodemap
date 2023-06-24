@@ -86,9 +86,7 @@ app_server <- function(input, output, session) {
   
   output$ui_sunb <- renderUI({
     if (is.null(input$table_phe_rows_selected)) {
-      textOutput({
         "Select 1 row in the table, Please."
-      })
     } else {
       shinycssloaders::withSpinner(
         plotly::plotlyOutput("sunburst",
@@ -100,9 +98,7 @@ app_server <- function(input, output, session) {
 
   output$ui_tree <- renderUI({
     if (is.null(input$table_phe_rows_selected)) {
-      textOutput({
         "Select 1 row in the table, Please."
-      })
     } else {
       shinycssloaders::withSpinner(
         collapsibleTree::collapsibleTreeOutput(
@@ -127,9 +123,7 @@ app_server <- function(input, output, session) {
 
   output$ui_legend <- renderUI({
     if (is.null(input$table_phe_rows_selected)) {
-      textOutput({
         "Select 1 row in the table, Please."
-      })
     } else {
       shinycssloaders::withSpinner(
         plotOutput("out_legend", height = "450px"), 

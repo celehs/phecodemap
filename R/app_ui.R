@@ -23,8 +23,7 @@ app_ui <- function(request) {
                                      width = "100px",
                                      style = "padding: 6px 20px 6px 20px;")
                       ),
-                      titleWidth = "200pt",
-                      controlbarIcon = shiny::icon("", verify_fa = FALSE)
+                      titleWidth = "200pt"
       ),
       shinydashboardPlus::dashboardSidebar(width = "0px", minified = FALSE),
       shinydashboard::dashboardBody(

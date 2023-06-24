@@ -57,10 +57,8 @@ buildPath <- function(rootid, icdmap) {
 
   node <- node[!duplicated(node), ]
   node <- rbind(node, data.frame(ids = rootid, labels = rootid, parents = ""))
-  node <- dplyr::left_join(dplyr::left_join(node, s_map[, 2:3], by = c("labels" = "ICD_id")),
-    s_map[, 4:5],
-    by = c("labels" = "Phecode")
-  )
+  node$ICD_str <- icdmap$ICD_str[match(node$labels, icdmap$ICD_id)]
+  node$Phenotype <- icdmap$Phenotype[match(node$labels, paste0("Phe:", icdmap$Phecode))]
   node <- node[!duplicated(node), ]
   node[is.na(node)] <- ""
   node$strs <- paste0(node$ICD_str, node$Phenotype)
