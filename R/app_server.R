@@ -5,8 +5,9 @@
 #'     DO NOT REMOVE.
 #'     
 #' @noRd
-app_server <- function(input, output, session) {
-
+app_server <- function(dict_uqid){
+    
+  server <- function(input, output, session) {
   steps <- readr::read_tsv(app_sys("app/doc/steps.tsv"), show_col_types = FALSE)
   observeEvent(input$help, {
     rintrojs::introjs(session,
@@ -20,16 +21,17 @@ app_server <- function(input, output, session) {
   })
   
   phe_id <- reactive({
-    url_vars <- session$clientData$url_search
-    gsub(".*\\?phecode=([\\d\\.]*)$", "\\1", url_vars, perl = TRUE)
+    getUnid(session, dict_uqid)
   })
   
   inputrow <- reactive({
-    phecode$row[match(paste0("PheCode:", phe_id()), phecode$Phecode)]
+    phecode$row[match(phe_id(), phecode$Phecode)]
   })
   
   output$table_phe <- DT::renderDT(
-    DT::datatable(icdmap[, c(4, 5, 1:3)],
+    DT::datatable({
+      print(inputrow())
+      icdmap[, c(4, 5, 1:3)]},
               extensions = "Scroller",
               colnames = c(
                 "ICD Description" = "ICD_str",
@@ -132,4 +134,6 @@ app_server <- function(input, output, session) {
   })
   
   output$out_legend <- renderPlot(legends(df_sunb()))
+  }
+  return(server)
 }

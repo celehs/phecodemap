@@ -235,3 +235,25 @@ addBlank <- function(x){
   paste(rep(" ", times = x), collapse = "")
 }
 
+
+
+
+
+getUnid <- function(session, dict_uqid){
+  url_vars <- session$clientData$url_search
+  if(grepl("uqid", url_vars)){
+    uqid = gsub(".*\\?uqid=(\\w+)$", "\\1", url_vars, perl = TRUE)
+    dict_uqid <- read_csv(dict_uqid)
+    paste0("PheCode:", dict_uqid$id[dict_uqid$uqid == uqid])
+  } else {
+    id = gsub(".*\\?phecode=([\\w\\.]+)$", "\\1", url_vars, perl = TRUE)
+    paste0("PheCode:", id)
+  }
+}
+
+
+
+
+
+
+
