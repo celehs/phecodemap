@@ -14,4 +14,23 @@
 #' @source \url{https://phewascatalog.org/}
 "icdmap"
 
-utils::globalVariables(c("icdmap"))
+
+
+
+#' Information of ICD codes
+#'
+#' A datatable of the information of icd codes from UMLS version 2021AB
+#'
+#' @format A data frame with 99765 rows and 3 columns:
+#' \describe{
+#'   \item{id}{ICD code}
+#'   \item{term}{ICD string}
+#'   \item{version}{ICD version, ICD-9 or ICD-10-cm}
+#' }
+#' @source \url{https://uts.nlm.nih.gov/uts/umls/}
+"dict_icd"
+
+
+
+utils::globalVariables(c("icdmap", "dict_icd"))
+

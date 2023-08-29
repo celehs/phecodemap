@@ -3,7 +3,9 @@
 #' @param input,output,session Internal parameters for {shiny}. 
 #' 
 #'     DO NOT REMOVE.
-#'     
+#'    
+#' @importFrom DT %>% 
+#' @import dplyr
 #' @noRd
 app_server <- function(dict_uqid){
     
@@ -30,7 +32,7 @@ app_server <- function(dict_uqid){
   
   output$table_phe <- DT::renderDT(
     DT::datatable({
-      print(inputrow())
+      print(paste("inputrow()", inputrow(), "selectPage", inputrow() %/% 8 + 1))
       icdmap[, c(4, 5, 1:3)]},
               extensions = "Scroller",
               colnames = c(
@@ -44,6 +46,10 @@ app_server <- function(dict_uqid){
               options = list(
                 deferRender = TRUE,
                 pageLength = 8,
+                # stateSave = TRUE,
+                displayStart = ifelse(
+                  is.na(inputrow()),
+                  1, inputrow()),
                 dom = "tp",
                 columns = list(
                   list(width = "80px" ),
@@ -54,13 +60,21 @@ app_server <- function(dict_uqid){
                 ),
                 scrollCollapse = TRUE
               ),
-              selection = list(mode = "single",
-                               selected = ifelse(
-                                 is.na(inputrow()), 
-                                 1, inputrow()))
+      selection = list(mode = 'single', 
+                       selected = ifelse(
+                         is.na(inputrow()), 
+                         1, inputrow()), 
+                       target = 'row')
     ),
     server = TRUE
   )
+  
+  # observeEvent(inputrow(), {
+  #   print(paste("inputrow()", inputrow(), "selectPage", inputrow() %/% 8 + 1))
+  #   DT::dataTableProxy("table_phe") %>%
+  #     DT::selectRows(inputrow()) %>%
+  #     DT::selectPage(inputrow() %/% 8 + 1)
+  # })
   
   # got rootid -----------------------
   
@@ -75,7 +89,8 @@ app_server <- function(dict_uqid){
   # render plot -----------------------
   
   nodes_list <- reactive({
-    addClass(rootid(), icdmap, df_highlight)
+    print(rootid())
+    addClass(rootid(), icdmap, dict_icd, df_highlight)
   })
   
   

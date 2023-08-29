@@ -5,6 +5,7 @@
 \title{Run the Shiny Application}
 \usage{
 run_app(
+  dict_uqid = NULL,
   onStart = NULL,
   options = list(),
   enableBookmarking = "server",
@@ -13,6 +14,8 @@ run_app(
 )
 }
 \arguments{
+\item{dict_uqid}{path to a csv files for dict_uqid.}
+
 \item{onStart}{A function that will be called before the app is actually run.
 This is only needed for \code{shinyAppObj}, since in the \code{shinyAppDir}
 case, a \code{global.R} file can be used for this purpose.}

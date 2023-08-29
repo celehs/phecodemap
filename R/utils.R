@@ -23,26 +23,27 @@ col_vector <- c("#984EA3", "#FFFF33", "#A65628", "#F781BF",
 colorlist <- c("lightblue", "palegreen", "red", "orange", col_vector)
 
 
-buildPath <- function(rootid, icdmap) {
+buildPath <- function(rootid, icdmap, dict_icd) {
 
   rootid <- paste0("Phe:", rootid)
   s_map <- icdmap
   s_map$Phecode <- paste0("Phe:", s_map$Phecode)
   s_map <- s_map[grepl(paste0(rootid, "\\..+"), s_map$Phecode, perl = TRUE) | (s_map$Phecode == rootid), ]
 
-  # print(paste("s_map:", nrow(s_map)))
+  print(paste("s_map:", nrow(s_map)))
 
   node_phe <- s_map[, c("Phecode", "Phenotype")]
   node_phe <- node_phe[!duplicated(node_phe), ]
-  node_phe$pathString <- sapply(node_phe$Phecode, getPath, 3)
+  node_phe$pathString <- sapply(node_phe$Phecode, getPath, dict_icd, 3)
 
   node_icd <- s_map[, c("ICD_version", "ICD_id", "ICD_str")]
   node_icd <- node_icd[!duplicated(node_icd), ]
-  node_icd$pathString <- sapply(node_icd$ICD_id, getPath)
+  node_icd$pathString <- sapply(node_icd$ICD_id, getPath, dict_icd)
 
   s_map <- dplyr::left_join(s_map, node_phe[, c(1, 3)], by = "Phecode")
   s_map <- dplyr::left_join(s_map, node_icd[, c(2, 4)], by = "ICD_id")
   s_map$pathString <- paste(s_map$pathString.x, s_map$ICD_version,s_map$pathString.y, sep = "/")
+
 
   node <- data.frame(ids = c(), labels = c(), parents = c())
   for (id in s_map$pathString) {
@@ -57,7 +58,10 @@ buildPath <- function(rootid, icdmap) {
 
   node <- node[!duplicated(node), ]
   node <- rbind(node, data.frame(ids = rootid, labels = rootid, parents = ""))
-  node$ICD_str <- icdmap$ICD_str[match(node$labels, icdmap$ICD_id)]
+  # node$ICD_str <- icdmap$ICD_str[match(node$labels, icdmap$ICD_id)]
+  node$ICD_str <- NA
+  node$ICD_str[grepl("ICD-9", node$ids)] <- (dict_icd$term[dict_icd$version == "ICD-9"])[match(node$labels[grepl("ICD-9", node$ids)], (dict_icd$id[dict_icd$version == "ICD-9"]))]
+  node$ICD_str[grepl("ICD-10", node$ids)] <- (dict_icd$term[dict_icd$version == "ICD-10-cm"])[match(node$labels[grepl("ICD-10", node$ids)], (dict_icd$id[dict_icd$version == "ICD-10-cm"]))]
   node$Phenotype <- icdmap$Phenotype[match(node$labels, paste0("Phe:", icdmap$Phecode))]
   node <- node[!duplicated(node), ]
   node[is.na(node)] <- ""
@@ -66,8 +70,8 @@ buildPath <- function(rootid, icdmap) {
   return(node)
 }
 
-addClass <- function(rootid, icdmap, df_highlight = df_highlight){
-  node <- buildPath(rootid, icdmap)
+addClass <- function(rootid, icdmap, dict_icd, df_highlight = df_highlight){
+  node <- buildPath(rootid, icdmap, dict_icd)
   nodes_color <- node[order(node$ids), c("ids", "labels")]
   nodes_color$newid <- nodes_color$labels
 
@@ -193,7 +197,7 @@ delDupRow <- function(x, cols = 1:ncol(x)) {
   x[!duplicated(x), ]
 }
 
-getParents <- function(node){
+getParents <- function(node, dict_icd){
   parents <- strsplit(node, ".", fixed = TRUE)[[1]][1]
   children <- strsplit(node, ".", fixed = TRUE)[[1]][2]
   if (!is.na(children)){
@@ -203,11 +207,14 @@ getParents <- function(node){
       parents <- c(parents, paste0(p, i))
     }
   }
+  if(node %in% dict_icd$id){
+    parents <- parents[parents %in% dict_icd$id]
+  }
   parents
 }
 
-getPath <- function(node, depth = NULL){
-  parents <- getParents(node)
+getPath <- function(node, dict_icd, depth = NULL){
+  parents <- getParents(node, dict_icd)
   path <- paste(parents, collapse = "/")
   if (!is.null(depth)){
     p <- parents[length(parents)]
@@ -243,17 +250,21 @@ getUnid <- function(session, dict_uqid){
   url_vars <- session$clientData$url_search
   if(grepl("uqid", url_vars)){
     uqid = gsub(".*\\?uqid=(\\w+)$", "\\1", url_vars, perl = TRUE)
-    dict_uqid <- read_csv(dict_uqid)
-    paste0("PheCode:", dict_uqid$id[dict_uqid$uqid == uqid])
+    dict_uqid <- readr::read_csv(dict_uqid)
+    df_uqid <- NULL
+    for (i in 1:ncol(dict_uqid)){
+      if(sum(!grepl("^[A-Za-z0-9]+$", dict_uqid[[i]])) == 0){
+        df_uqid$uqid <- as.character(dict_uqid[[i]])
+      } else if(sum(!grepl("^[\\w\\:\\.\\-]+$", dict_uqid[[i]], perl = TRUE)) == 0){
+        df_uqid$id <- dict_uqid[[i]]
+        df_uqid$id[grepl("_", df_uqid$id)] <- gsub("Phe_", "PheCode:", df_uqid$id[grepl("_", df_uqid$id)])
+        df_uqid$id[grepl("_", df_uqid$id)] <- gsub("_", ".", df_uqid$id[grepl("_", df_uqid$id)])
+      }
+    }
+    paste0(df_uqid$id[df_uqid$uqid == uqid])
   } else {
     id = gsub(".*\\?phecode=([\\w\\.]+)$", "\\1", url_vars, perl = TRUE)
     paste0("PheCode:", id)
   }
 }
-
-
-
-
-
-
 
