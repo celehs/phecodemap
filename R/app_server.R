@@ -135,7 +135,7 @@ app_server <- function(dict_uqid){
   })
   
   output$sunburst <- plotly::renderPlotly({
-    sunburstPlotly(df_sunb(), input$maxd_sunburst)
+    sunburstPlotly(rootid(), df_sunb(), input$maxd_sunburst)
   })
 
   output$ui_legend <- renderUI({

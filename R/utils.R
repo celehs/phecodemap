@@ -155,7 +155,7 @@ dfSunburst <- function(nodes_list){
   return(df_plot)
 }
 
-sunburstPlotly <- function(df_plot, maxd = 10) {
+sunburstPlotly <- function(centernode, df_plot, maxd = 10) {
   plotly::plot_ly(df_plot,
           ids =~ ids,
           labels =~ labels,
@@ -167,8 +167,12 @@ sunburstPlotly <- function(df_plot, maxd = 10) {
                                     # width = df_plot$linewidth
                                     )
                         ),
-          type = "sunburst"
-  )
+          type = "sunburst") %>%
+  plotly::config(
+    toImageButtonOptions = list(
+      format = "svg",
+      filename = paste0("barplot_", paste(centernode, collapse = "_"))
+    ))
 }
 
 treePlot <- function(nodes_list, maxd = 4, collapsed = FALSE) {
