@@ -1,7 +1,5 @@
 #' The application server-side
 #' 
-#' @Uniq_id file path for uniq_id.
-#' @url_va url to va for phecode.
 #' @param input,output,session Internal parameters for {shiny}. 
 #' 
 #'     DO NOT REMOVE.
@@ -12,8 +10,9 @@
 app_server <- function(Uniq_id, url_va){
     
   server <- function(input, output, session) {
-  steps <- readr::read_tsv(app_sys("app/doc/steps.tsv"), show_col_types = FALSE)
-  observeEvent(input$help, {
+  # steps <- readr::read_tsv(app_sys("app/doc/steps.tsv"), show_col_types = FALSE)
+    steps <- data.table::fread(app_sys("app/doc/steps.tsv"))
+    observeEvent(input$help, {
     rintrojs::introjs(session,
             options = list(steps=steps[, -1],
                            showBullets = FALSE))})
@@ -24,7 +23,7 @@ app_server <- function(Uniq_id, url_va){
   uniq_id <- reactive({
     if(!is.null(Uniq_id)){
       # utils::read.csv(Uniq_id, header = TRUE, colClasses = c("character", "character"))
-      getUqid(readr::read_csv(Uniq_id))
+      getUqid(data.table::fread(Uniq_id))
     }
   })
   
@@ -181,19 +180,10 @@ app_server <- function(Uniq_id, url_va){
   
   output$out_legend <- renderPlot(legends(df_sunb()))
   
-  uniq_id <- reactive({
-    if(!is.null(Uniq_id)){
-      # utils::read.csv(Uniq_id, header = TRUE, colClasses = c("character", "character"))
-      getUqid(data.table::fread(Uniq_id))
-    }
-  })
-  
   # btn back to VA ====
   
-  observeEvent(rootid(), {
-    saveRDS(uniq_id(), "test_uniq_id.rds")
-    print(head(uniq_id()))
-      uqid <- uniq_id()$uqid[uniq_id()$id == paste0("PheCode:", rootid())]
+  observeEvent(input$table_phe_rows_selected, {
+      uqid <- uniq_id()$uqid[uniq_id()$id == paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])]
       print(uqid)
       # href <- paste0("https://phenomics-dev.va.ornl.gov/cipher/phenotype-viewer?uqid=", uqid)
       href <- paste0(url_va, uqid)

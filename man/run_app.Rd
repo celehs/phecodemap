@@ -5,7 +5,8 @@
 \title{Run the Shiny Application}
 \usage{
 run_app(
-  dict_uqid = NULL,
+  Uniq_id = NULL,
+  url_va = NULL,
   onStart = NULL,
   options = list(),
   enableBookmarking = "server",
@@ -14,7 +15,9 @@ run_app(
 )
 }
 \arguments{
-\item{dict_uqid}{path to a csv files for dict_uqid.}
+\item{Uniq_id}{path to a csv files for dict_uqid.}
+
+\item{url_va}{url to va for phecode.}
 
 \item{onStart}{A function that will be called before the app is actually run.
 This is only needed for \code{shinyAppObj}, since in the \code{shinyAppDir}
