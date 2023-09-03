@@ -180,25 +180,59 @@ app_server <- function(Uniq_id, url_va){
   
   output$out_legend <- renderPlot(legends(df_sunb()))
   
-  # btn back to VA ====
+  # box title ====
   
-  observeEvent(input$table_phe_rows_selected, {
-      uqid <- uniq_id()$uqid[uniq_id()$id == paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])]
-      print(uqid)
-      # href <- paste0("https://phenomics-dev.va.ornl.gov/cipher/phenotype-viewer?uqid=", uqid)
-      href <- paste0(url_va, uqid)
-      output$toVA <- renderUI({
-        
+  # output$box_title <- renderText({
+  #   if(is.null(input$table_phe_rows_selected)){
+  #     "Legend"
+  #   } else {
+  #     paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])
+  #   }
+  # })
+  
+  output$box_title <- renderUI({
+    if(is.null(input$table_phe_rows_selected)){
+      "Legend"
+    } else {
+      center <- paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])
+      href <- paste0(url_va, uniq_id()$uqid[uniq_id()$id == center])
+      # HTML(paste0(center, " ",
+      #             "<p><a href=\"", href, "\">View in CIPHER</a></p>"))
+      
+      htmltools::p(center,
+        # tags$a(span(icon("hand-point-right"), "View in CIPHER"), 
+        #                     href = href, target = "_blank"))
         actionButton("tova",
                      class = "btn-primary active", width = "157px",
                      icon = icon("share"),
                      title = "Link back to CIPHER.",
-                     style = "margin: 8px 10px 0px 0px;",
+                     style = "margin: 0 0 0 20px;",
                      tags$a("View in CIPHER", 
                             href = href, 
-                            target = "_blank"))
-    })
+                            target = "_blank")))
+      
+    }
   })
+  
+  # btn back to VA ====
+  
+  # observeEvent(input$table_phe_rows_selected, {
+  #     uqid <- uniq_id()$uqid[uniq_id()$id == paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])]
+  #     print(uqid)
+  #     # href <- paste0("https://phenomics-dev.va.ornl.gov/cipher/phenotype-viewer?uqid=", uqid)
+  #     href <- paste0(url_va, uqid)
+  #     output$toVA <- renderUI({
+  #       
+  #       actionButton("tova",
+  #                    class = "btn-primary active", width = "157px",
+  #                    icon = icon("share"),
+  #                    title = "Link back to CIPHER.",
+  #                    style = "margin: 8px 10px 0px 0px;",
+  #                    tags$a("View in CIPHER", 
+  #                           href = href, 
+  #                           target = "_blank"))
+  #   })
+  # })
   
   # read uqid file ====
   
