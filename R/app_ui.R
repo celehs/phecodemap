@@ -14,12 +14,12 @@ app_ui <- function(request) {
                       leftUi = tagList(
                         # includeCSS("www/style.css"),
                         actionButton("instruct", " About",
-                                     icon = icon("book"),
+                                     # icon = icon("book"),
                                      class="btn btn-primary header-button",
                                      width = "100px",
                                      style = "padding: 6px 20px 6px 20px;"),
-                        actionButton("help", " Help",
-                                     icon = icon("question"),
+                        actionButton("help", " Tutorial",
+                                     # icon = icon("question"),
                                      class="btn btn-primary header-button",
                                      width = "100px",
                                      style = "padding: 6px 20px 6px 20px;")
