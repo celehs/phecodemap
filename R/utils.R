@@ -250,25 +250,25 @@ addBlank <- function(x){
 
 
 
-getUnid <- function(session, dict_uqid){
-  url_vars <- session$clientData$url_search
-  if(grepl("uqid", url_vars)){
-    uqid = gsub(".*\\?uqid=(\\w+)$", "\\1", url_vars, perl = TRUE)
-    dict_uqid <- readr::read_csv(dict_uqid)
-    df_uqid <- NULL
-    for (i in 1:ncol(dict_uqid)){
-      if(sum(!grepl("^[A-Za-z0-9]+$", dict_uqid[[i]])) == 0){
-        df_uqid$uqid <- as.character(dict_uqid[[i]])
-      } else if(sum(!grepl("^[\\w\\:\\.\\-]+$", dict_uqid[[i]], perl = TRUE)) == 0){
-        df_uqid$id <- dict_uqid[[i]]
-        df_uqid$id[grepl("_", df_uqid$id)] <- gsub("Phe_", "PheCode:", df_uqid$id[grepl("_", df_uqid$id)])
-        df_uqid$id[grepl("_", df_uqid$id)] <- gsub("_", ".", df_uqid$id[grepl("_", df_uqid$id)])
-      }
-    }
-    paste0(df_uqid$id[df_uqid$uqid == uqid])
-  } else {
-    id = gsub(".*\\?phecode=([\\w\\.]+)$", "\\1", url_vars, perl = TRUE)
-    paste0("PheCode:", id)
-  }
-}
+# getUnid <- function(session, dict_uqid){
+#   url_vars <- session$clientData$url_search
+#   if(grepl("uqid", url_vars)){
+#     uqid = gsub(".*\\?uqid=(\\w+)$", "\\1", url_vars, perl = TRUE)
+#     dict_uqid <- readr::read_csv(dict_uqid)
+#     df_uqid <- NULL
+#     for (i in 1:ncol(dict_uqid)){
+#       if(sum(!grepl("^[A-Za-z0-9]+$", dict_uqid[[i]])) == 0){
+#         df_uqid$uqid <- as.character(dict_uqid[[i]])
+#       } else if(sum(!grepl("^[\\w\\:\\.\\-]+$", dict_uqid[[i]], perl = TRUE)) == 0){
+#         df_uqid$id <- dict_uqid[[i]]
+#         df_uqid$id[grepl("_", df_uqid$id)] <- gsub("Phe_", "PheCode:", df_uqid$id[grepl("_", df_uqid$id)])
+#         df_uqid$id[grepl("_", df_uqid$id)] <- gsub("_", ".", df_uqid$id[grepl("_", df_uqid$id)])
+#       }
+#     }
+#     paste0(df_uqid$id[df_uqid$uqid == uqid])
+#   } else {
+#     id = gsub(".*\\?phecode=([\\w\\.]+)$", "\\1", url_vars, perl = TRUE)
+#     paste0("PheCode:", id)
+#   }
+# }
 

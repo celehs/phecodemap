@@ -1,5 +1,7 @@
 #' The application server-side
 #' 
+#' @Uniq_id file path for uniq_id.
+#' @url_va url to va for phecode.
 #' @param input,output,session Internal parameters for {shiny}. 
 #' 
 #'     DO NOT REMOVE.
@@ -7,7 +9,7 @@
 #' @importFrom DT %>% 
 #' @import dplyr
 #' @noRd
-app_server <- function(dict_uqid){
+app_server <- function(Uniq_id, url_va){
     
   server <- function(input, output, session) {
   steps <- readr::read_tsv(app_sys("app/doc/steps.tsv"), show_col_types = FALSE)
@@ -16,18 +18,51 @@ app_server <- function(dict_uqid){
             options = list(steps=steps[, -1],
                            showBullets = FALSE))})
   
-  output$ui_table <- renderUI({
-    shinycssloaders::withSpinner(
-      DT::DTOutput("table_phe"), 
-      type = 5)
+  # uniq id ====
+  url_vars <- reactive({ session$clientData$url_search })
+  
+  uniq_id <- reactive({
+    if(!is.null(Uniq_id)){
+      # utils::read.csv(Uniq_id, header = TRUE, colClasses = c("character", "character"))
+      getUqid(readr::read_csv(Uniq_id))
+    }
+  })
+  
+  url_node <- reactive({
+    if(grepl('uqid=', url_vars())){
+      id = gsub(".+?uqid=(.+)", "\\1", url_vars(), perl = TRUE)
+      id = strsplit(id, "&")[[1]]
+      if ((id %in% phecode$Phecode)) {
+        id
+      } else if(!is.null(uniq_id())){
+        if((id %in% uniq_id()$uqid)[1]){
+          uniq_id()$id[uniq_id()$uqid == id]
+        }
+      }
+    } else if(grepl('phecode=', url_vars())){
+      id = gsub(".+?phecode=(.+)", "\\1", url_vars(), perl = TRUE)
+      paste0("PheCode:", id)
+    }
   })
   
   phe_id <- reactive({
-    getUnid(session, dict_uqid)
+    if(isTruthy(url_node())){
+        url_node()
+      } else {
+        c("PheCode:008")
+      }
   })
   
   inputrow <- reactive({
     phecode$row[match(phe_id(), phecode$Phecode)]
+  })
+  
+  # input table ====
+  
+  output$ui_table <- renderUI({
+    shinycssloaders::withSpinner(
+      DT::DTOutput("table_phe"), 
+      type = 5)
   })
   
   output$table_phe <- DT::renderDT(
@@ -47,9 +82,7 @@ app_server <- function(dict_uqid){
                 deferRender = TRUE,
                 pageLength = 8,
                 # stateSave = TRUE,
-                displayStart = ifelse(
-                  is.na(inputrow()),
-                  1, inputrow()),
+                # displayStart = inputrow(),
                 dom = "tp",
                 columns = list(
                   list(width = "80px" ),
@@ -61,9 +94,7 @@ app_server <- function(dict_uqid){
                 scrollCollapse = TRUE
               ),
       selection = list(mode = 'single', 
-                       selected = ifelse(
-                         is.na(inputrow()), 
-                         1, inputrow()), 
+                       selected = inputrow(), 
                        target = 'row')
     ),
     server = TRUE
@@ -149,6 +180,52 @@ app_server <- function(dict_uqid){
   })
   
   output$out_legend <- renderPlot(legends(df_sunb()))
+  
+  uniq_id <- reactive({
+    if(!is.null(Uniq_id)){
+      # utils::read.csv(Uniq_id, header = TRUE, colClasses = c("character", "character"))
+      getUqid(data.table::fread(Uniq_id))
+    }
+  })
+  
+  # btn back to VA ====
+  
+  observeEvent(rootid(), {
+    saveRDS(uniq_id(), "test_uniq_id.rds")
+    print(head(uniq_id()))
+      uqid <- uniq_id()$uqid[uniq_id()$id == paste0("PheCode:", rootid())]
+      print(uqid)
+      # href <- paste0("https://phenomics-dev.va.ornl.gov/cipher/phenotype-viewer?uqid=", uqid)
+      href <- paste0(url_va, uqid)
+      output$toVA <- renderUI({
+        
+        actionButton("tova",
+                     class = "btn-primary active", width = "157px",
+                     icon = icon("share"),
+                     title = "Link back to CIPHER.",
+                     style = "margin: 8px 10px 0px 0px;",
+                     tags$a("View in CIPHER", 
+                            href = href, 
+                            target = "_blank"))
+    })
+  })
+  
+  # read uqid file ====
+  
+  getUqid <- function(df){
+    df_uqid <- NULL
+    for (i in 1:ncol(df)){
+      if(sum(!grepl("^[A-Za-z0-9]+$", df[[i]])) == 0){
+        df_uqid$uqid <- as.character(df[[i]])
+      } else if(sum(!grepl("^[\\w\\:\\.\\-]+$", df[[i]], perl = TRUE)) == 0){
+        df_uqid$id <- df[[i]]
+        df_uqid$id[grepl("_", df_uqid$id)] <- gsub("Phe_", "PheCode:", df_uqid$id[grepl("_", df_uqid$id)])
+        df_uqid$id[grepl("_", df_uqid$id)] <- gsub("_", ".", df_uqid$id[grepl("_", df_uqid$id)])
+      }
+    }
+    as.data.frame(df_uqid)
+  }
+  
   }
   return(server)
 }

@@ -1,6 +1,7 @@
 #' Run the Shiny Application
 #'
-#' @param dict_uqid path to a csv files for dict_uqid.
+#' @param Uniq_id path to a csv files for dict_uqid.
+#' @param url_va url to va for phecode.
 #' @param ... arguments to pass to golem_opts. 
 #' See `?golem::get_golem_options` for more details.
 #' @inheritParams shiny::shinyApp
@@ -10,7 +11,8 @@
 #' @importFrom shiny shinyApp
 #' @importFrom golem with_golem_options 
 run_app <- function(
-  dict_uqid = NULL,
+  Uniq_id = NULL,
+  url_va = NULL,
   onStart = NULL,
   options = list(), 
   enableBookmarking = "server",
@@ -21,7 +23,7 @@ run_app <- function(
   with_golem_options(
     app = shinyApp(
       ui = app_ui,
-      server = app_server(dict_uqid),
+      server = app_server(Uniq_id, url_va),
       onStart = onStart,
       options = options, 
       enableBookmarking = enableBookmarking, 
