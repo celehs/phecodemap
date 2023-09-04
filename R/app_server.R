@@ -191,7 +191,7 @@ app_server <- function(Uniq_id, url_va){
   # })
   
   output$box_title <- renderUI({
-    if(is.null(input$table_phe_rows_selected)){
+    if(is.null(Uniq_id) || is.null(input$table_phe_rows_selected)){
       "Legend"
     } else {
       center <- paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])
@@ -200,8 +200,6 @@ app_server <- function(Uniq_id, url_va){
       #             "<p><a href=\"", href, "\">View in CIPHER</a></p>"))
       
       htmltools::p(center,
-        # tags$a(span(icon("hand-point-right"), "View in CIPHER"), 
-        #                     href = href, target = "_blank"))
         actionButton("tova",
                      class = "btn-primary active", width = "157px",
                      icon = icon("share"),
