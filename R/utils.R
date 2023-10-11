@@ -31,34 +31,95 @@ buildPath <- function(rootid, icdmap, dict_icd) {
   s_map <- s_map[grepl(paste0(rootid, "\\..+"), s_map$Phecode, perl = TRUE) | (s_map$Phecode == rootid), ]
 
   print(paste("s_map:", nrow(s_map)))
+  
+  getPath3 <- function(node, all_ids, depth = NULL){
+    parents <- sapply(1:nchar(node), function(x){
+      substring(node, 1, x)
+    })
+    parents <- parents[parents %in% all_ids]
+    if (!is.null(depth)){
+      n <- length(parents)
+      parents <- c(parents, rep(parents[n], depth - n))
+    }
+    paste(parents, collapse = "/")
+  }
 
   node_phe <- s_map[, c("Phecode", "Phenotype")]
   node_phe <- node_phe[!duplicated(node_phe), ]
-  node_phe$pathString <- sapply(node_phe$Phecode, getPath, dict_icd, 3)
-
+  node_phe$pathString <- sapply(node_phe$Phecode, getPath3, paste0("Phe:", unique(icdmap$Phecode)), 3)
+  # 
+  # node_icd <- s_map[, c("ICD_version", "ICD_id", "ICD_str")]
+  # node_icd <- node_icd[!duplicated(node_icd), ]
+  # node_icd$pathString <- sapply(node_icd$ICD_id, getPath3, dict_icd$id)
+  
+  
+  
+  removeP <- function(x, p, all_ids){
+    x[x == p | p == "" | (!x %in% all_ids)] <- ""
+    x
+  }
+  
+  getPath4 <- function(node, all_ids, depth = NULL){
+    p0 = gsub("\\..+", "", node)
+    p1 <- removeP(gsub("^(.+\\..).*$", "\\1", node, perl = TRUE), p0, all_ids)
+    p2 <- removeP(gsub("^(.+\\...).*$", "\\1", node, perl = TRUE), p1, all_ids)
+    p3 <- removeP(gsub("^(.+\\....).*$", "\\1", node, perl = TRUE), p2, all_ids)
+    p4 <- removeP(node, p3, all_ids)
+    parents <- paste(p0, p1, p2, p3, p4, sep = "/")
+    parents <- gsub("/+$", "", parents, perl = TRUE)
+    parents <- gsub("//+", "/", parents, perl = TRUE)
+    parents
+  }
+  
   node_icd <- s_map[, c("ICD_version", "ICD_id", "ICD_str")]
   node_icd <- node_icd[!duplicated(node_icd), ]
-  node_icd$pathString <- sapply(node_icd$ICD_id, getPath, dict_icd)
+  node_icd$pathString <- getPath4(node_icd$ICD_id, dict_icd$id)
 
   s_map <- dplyr::left_join(s_map, node_phe[, c(1, 3)], by = "Phecode")
   s_map <- dplyr::left_join(s_map, node_icd[, c(2, 4)], by = "ICD_id")
   s_map$pathString <- paste(s_map$pathString.x, s_map$ICD_version,s_map$pathString.y, sep = "/")
-
-
-  node <- data.frame(ids = c(), labels = c(), parents = c())
-  for (id in s_map$pathString) {
-    while (grepl("/", id, fixed = TRUE)) {
-      all_n <- strsplit(id, "/", fixed = TRUE)[[1]]
-      label <- all_n[length(all_n)]
-      parent <- substring(id, 1, nchar(id) - nchar(label) - 1)
-      node <- rbind(node, data.frame(ids = id, labels = label, parents = parent))
-      id <- parent
+  
+  getP <- function(x){
+    ids <- x
+    while(grepl("/", x, fixed = TRUE)){
+      x <- gsub("^(.+)/.+$", "\\1", x)
+      ids <- c(x, ids)
     }
+    ids
   }
+  
+  ids <- unique(unlist(lapply(s_map$pathString, getP)))
+  node <- data.frame(ids = ids,
+                     labels = gsub("^.+/([^/]+)$", "\\1", ids, perl = TRUE),
+                     parents = gsub("^(.+)/[^/]+$", "\\1", ids, perl = TRUE))
+  node$parents[node$ids == rootid] <- ""
+  
+  # node_phe <- s_map[, c("Phecode", "Phenotype")]
+  # node_phe <- node_phe[!duplicated(node_phe), ]
+  # node_phe$pathString <- sapply(node_phe$Phecode, getPath, dict_icd, 3)
+  # 
+  # node_icd <- s_map[, c("ICD_version", "ICD_id", "ICD_str")]
+  # node_icd <- node_icd[!duplicated(node_icd), ]
+  # node_icd$pathString <- sapply(node_icd$ICD_id, getPath, dict_icd)
+  # 
+  # s_map <- dplyr::left_join(s_map, node_phe[, c(1, 3)], by = "Phecode")
+  # s_map <- dplyr::left_join(s_map, node_icd[, c(2, 4)], by = "ICD_id")
+  # s_map$pathString <- paste(s_map$pathString.x, s_map$ICD_version,s_map$pathString.y, sep = "/")
+  # 
+  # node <- data.frame(ids = c(), labels = c(), parents = c())
+  # for (id in s_map$pathString) {
+  #   while (grepl("/", id, fixed = TRUE)) {
+  #     all_n <- strsplit(id, "/", fixed = TRUE)[[1]]
+  #     label <- all_n[length(all_n)]
+  #     parent <- substring(id, 1, nchar(id) - nchar(label) - 1)
+  #     node <- rbind(node, data.frame(ids = id, labels = label, parents = parent))
+  #     id <- parent
+  #   }
+  # }
+  # node <- node[!duplicated(node), ]
+  # node <- rbind(node, data.frame(ids = rootid, labels = rootid, parents = ""))
 
-  node <- node[!duplicated(node), ]
-  node <- rbind(node, data.frame(ids = rootid, labels = rootid, parents = ""))
-  # node$ICD_str <- icdmap$ICD_str[match(node$labels, icdmap$ICD_id)]
+
   node$ICD_str <- NA
   node$ICD_str[grepl("ICD-9", node$ids)] <- (dict_icd$term[dict_icd$version == "ICD-9"])[match(node$labels[grepl("ICD-9", node$ids)], (dict_icd$id[dict_icd$version == "ICD-9"]))]
   node$ICD_str[grepl("ICD-10", node$ids)] <- (dict_icd$term[dict_icd$version == "ICD-10-cm"])[match(node$labels[grepl("ICD-10", node$ids)], (dict_icd$id[dict_icd$version == "ICD-10-cm"]))]
