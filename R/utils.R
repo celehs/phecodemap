@@ -252,7 +252,7 @@ legends <- function(df_sunb){
   df <- df[order(df$class),]
   options(repr.plot.width=6, repr.plot.height=24)
   plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
-  graphics::legend("topleft", legend =df$class, pch=16, pt.cex=3, cex=1.5, bty='n',
+  graphics::legend("left", legend =df$class, pch=16, pt.cex=3, cex=1, bty='n',
          y.intersp=1.3, ncol=2,
          col = df$color)
 }

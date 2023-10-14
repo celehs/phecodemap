@@ -173,7 +173,7 @@ app_server <- function(Uniq_id, url_va){
         "Select 1 row in the table, Please."
     } else {
       shinycssloaders::withSpinner(
-        plotOutput("out_legend", height = "450px"), 
+        plotOutput("out_legend"), 
         type = 5)
     }
   })

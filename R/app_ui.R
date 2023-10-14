@@ -28,6 +28,7 @@ app_ui <- function(request) {
       shinydashboardPlus::dashboardSidebar(width = "0px", minified = FALSE),
       shinydashboard::dashboardBody(
         rintrojs::introjsUI(),
+        includeScript(app_sys("app/www/setHeight.js")),
         tags$head(
           tags$style(HTML("
       .collapsibleTree .node circle {
