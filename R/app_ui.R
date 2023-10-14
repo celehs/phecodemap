@@ -29,13 +29,7 @@ app_ui <- function(request) {
       shinydashboard::dashboardBody(
         rintrojs::introjsUI(),
         includeScript(app_sys("app/www/setHeight.js")),
-        tags$head(
-          tags$style(HTML("
-      .collapsibleTree .node circle {
-        stroke-opacity: 0;
-      }
-      "))
-        ),
+        includeCSS(app_sys("app/www/style.css")),
         shinydashboardPlus::box(
           width = 8, id = "box_table",
           title = "PheCode Mapping with ICD-9 and ICD-10-cm Codes",
@@ -46,11 +40,12 @@ app_ui <- function(request) {
         shinydashboardPlus::box(
           width = 4, id = "box_legend",
           # title = textOutput("box_title"),
-          title = uiOutput("box_title"), 
+          title = uiOutput("box_title"),
           status = "info",
           align = "center", collapsible = TRUE,
           # uiOutput("toVA"),
-          uiOutput("ui_legend")
+          uiOutput("ui_legend")#,
+          # uiOutput("legend_btn")
         ),
         
         #  sunburst   --------------------

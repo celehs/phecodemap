@@ -41,7 +41,9 @@
 }
 */
 
-
+.collapsibleTree .node circle {
+        stroke-opacity: 0;
+      }
 
 #box_legend > div.box-header.with-border > h3.box-title {
   height: 20px;
@@ -50,7 +52,7 @@
 
 #tova {
   width:157px;
-position: absolute;
+  position: absolute;
   right: 40px;
   top: 6px;
   padding-bottom: 3px;
