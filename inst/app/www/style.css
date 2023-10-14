@@ -41,3 +41,25 @@
 }
 */
 
+
+
+#box_legend > div.box-header.with-border > h3.box-title {
+  height: 20px;
+}
+
+
+#tova {
+  width:157px;
+position: absolute;
+  right: 40px;
+  top: 6px;
+  padding-bottom: 3px;
+  padding-top: 3px;
+}
+
+/*  
+#box_legend > div.box-header.with-border{
+  text-align: center;
+  padding-top: 6px;
+}
+ */

@@ -23,7 +23,7 @@ function setObservationOp(objectId){
     // console.log("DOM updated");
     setHeight();
   })
-  observe.observe(observingDom);
+  observe.observe(observingDom, { attributes: true, childList: true, subtree: true });
 }
 
 // Store all insertedDoms
