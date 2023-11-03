@@ -34,7 +34,7 @@ app_ui <- function(request) {
           width = 8, id = "box_table",
           title = "PheCode Mapping with ICD-9 and ICD-10-cm Codes",
           status = "primary",
-          align = "center", collapsible = TRUE,
+          align = "center", # collapsible = TRUE,
           uiOutput("ui_table")
         ),
         shinydashboardPlus::box(
@@ -42,7 +42,7 @@ app_ui <- function(request) {
           # title = textOutput("box_title"),
           title = uiOutput("box_title"),
           status = "info",
-          align = "center", collapsible = TRUE,
+          align = "center", # collapsible = TRUE,
           # uiOutput("toVA"),
           uiOutput("ui_legend")#,
           # uiOutput("legend_btn")

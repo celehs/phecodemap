@@ -250,10 +250,10 @@ legends <- function(df_sunb){
   df <- delDupRow(df_sunb[, c("class", "color")])
   df <- df[df$class != "dupnode",]
   df <- df[order(df$class),]
-  options(repr.plot.width=6, repr.plot.height=24)
+  options(repr.plot.width=6, repr.plot.height=18)
   plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
-  graphics::legend("left", legend =df$class, pch=16, pt.cex=3, cex=1, bty='n',
-         y.intersp=1.3, ncol=2,
+  graphics::legend("center", legend =df$class, pch=16, pt.cex=3, cex=1.2, bty='n',
+         y.intersp=1.5, ncol=2,
          col = df$color)
 }
 

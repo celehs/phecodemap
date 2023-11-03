@@ -189,6 +189,26 @@ app_server <- function(Uniq_id, url_va){
   #     paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])
   #   }
   # })
+  # 
+  # output$legend_btn <- renderUI({
+  #   if(is.null(Uniq_id) || is.null(input$table_phe_rows_selected)){
+  #     "Legend"
+  #   } else {
+  #     center <- paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])
+  #     href <- paste0(url_va, uniq_id()$uqid[uniq_id()$id == center])
+  #     
+  #    actionButton("tova",
+  #                 class = "btn-primary active", width = "157px",
+  #                 icon = icon("share"),
+  #                 title = "Link back to CIPHER.",
+  #                 style = "margin: 0 0 0 20px;",
+  #                 tags$a("View in CIPHER", 
+  #                        href = href, 
+  #                        target = "_blank"))
+  #   }
+  #     
+  #   
+  # })
   
   output$box_title <- renderUI({
     if(is.null(Uniq_id) || is.null(input$table_phe_rows_selected)){
@@ -198,17 +218,17 @@ app_server <- function(Uniq_id, url_va){
       href <- paste0(url_va, uniq_id()$uqid[uniq_id()$id == center])
       # HTML(paste0(center, " ",
       #             "<p><a href=\"", href, "\">View in CIPHER</a></p>"))
-      
-      htmltools::p(center,
+      desc_center <- icdmap$Phenotype[match(center, paste0("PheCode:", icdmap$Phecode))]
+      htmltools::p(desc_center,
         actionButton("tova",
                      class = "btn-primary active", width = "157px",
                      icon = icon("share"),
                      title = "Link back to CIPHER.",
-                     style = "margin: 0 0 0 20px;",
-                     tags$a("View in CIPHER", 
-                            href = href, 
+                     # style = "margin: 0 0 0 20px;",
+                     tags$a("View in CIPHER",
+                            href = href,
                             target = "_blank")))
-      
+
     }
   })
   
