@@ -172,9 +172,13 @@ app_server <- function(Uniq_id, url_va){
     if (is.null(input$table_phe_rows_selected)) {
         "Select 1 row in the table, Please."
     } else {
-      shinycssloaders::withSpinner(
-        plotOutput("out_legend"), 
-        type = 5)
+      tagList(
+        paste0("Phenotype: ", icdmap$Phenotype[input$table_phe_rows_selected]),
+        
+        shinycssloaders::withSpinner(
+          plotOutput("out_legend"), 
+          type = 5)
+      )
     }
   })
   
@@ -218,8 +222,7 @@ app_server <- function(Uniq_id, url_va){
       href <- paste0(url_va, uniq_id()$uqid[uniq_id()$id == center])
       # HTML(paste0(center, " ",
       #             "<p><a href=\"", href, "\">View in CIPHER</a></p>"))
-      desc_center <- icdmap$Phenotype[match(center, paste0("PheCode:", icdmap$Phecode))]
-      htmltools::p(desc_center,
+      htmltools::p(center,
         actionButton("tova",
                      class = "btn-primary active", width = "157px",
                      icon = icon("share"),
