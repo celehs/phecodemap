@@ -46,6 +46,7 @@ buildPath <- function(rootid, icdmap, dict_icd) {
 
   node_phe <- s_map[, c("Phecode", "Phenotype")]
   node_phe <- node_phe[!duplicated(node_phe), ]
+  
   node_phe$pathString <- sapply(node_phe$Phecode, getPath3, paste0("Phe:", unique(icdmap$Phecode)), 3)
   # 
   # node_icd <- s_map[, c("ICD_version", "ICD_id", "ICD_str")]
@@ -93,6 +94,10 @@ buildPath <- function(rootid, icdmap, dict_icd) {
                      labels = gsub("^.+/([^/]+)$", "\\1", ids, perl = TRUE),
                      parents = gsub("^(.+)/[^/]+$", "\\1", ids, perl = TRUE))
   node$parents[node$ids == rootid] <- ""
+  
+  if(!rootid %in% node$ids) {
+    node$parents[node$ids == node$parents] <- ""
+  }
   
   # node_phe <- s_map[, c("Phecode", "Phenotype")]
   # node_phe <- node_phe[!duplicated(node_phe), ]
