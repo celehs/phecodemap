@@ -176,7 +176,7 @@ app_server <- function(Uniq_id, url_va){
         paste0("Phenotype: ", icdmap$Phenotype[input$table_phe_rows_selected]),
         
         shinycssloaders::withSpinner(
-          plotOutput("out_legend"), 
+          plotOutput("out_legend", height = "300px"), 
           type = 5)
       )
     }
