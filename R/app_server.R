@@ -67,7 +67,7 @@ app_server <- function(Uniq_id, url_va){
   output$table_phe <- DT::renderDT(
     DT::datatable({
       print(paste("inputrow()", inputrow(), "selectPage", inputrow() %/% 8 + 1))
-      icdmap[, c(4, 5, 1:3)]},
+      icdmap[, c(4, 5, 1:3, 6)]},
               extensions = "Scroller",
               colnames = c(
                 "ICD Description" = "ICD_str",
@@ -88,7 +88,8 @@ app_server <- function(Uniq_id, url_va){
                   NULL,
                   list(width = "80px" ),
                   list(width = "80px" ),
-                  NULL
+                  NULL,
+                  list(width = "80px" )
                 ),
                 scrollCollapse = TRUE
               ),
