@@ -9,7 +9,7 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic 
     shinydashboardPlus::dashboardPage(
-      shinydashboardPlus::dashboardHeader(title = "PheCode Map with ICD",
+      shinydashboardPlus::dashboardHeader(title = "PheCode to ICD map",
                       leftUi = tagList(
                         # includeCSS("www/style.css"),
                         actionButton("instruct", " About",
