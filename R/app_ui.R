@@ -35,6 +35,14 @@ app_ui <- function(request) {
           title = "PheCode Mapping with ICD-9 and ICD-10-cm Codes",
           status = "primary",
           align = "center", # collapsible = TRUE,
+          dropdownMenu = shinydashboardPlus::boxDropdown(
+            id = "box_table_sunb",
+            div(p(HTML('<b>Note:</b>')),
+                p(HTML("<b>Rollup:</b>  Whether or not ICDs mapped to this code also map to this code's parents.For example, if rollup is 1, an ICD that maps to the phecode 008.11 will also map to the phecodes 008.1 and
+                       008.")),
+                style = "padding: 0 10px;width: 320px;"),
+            icon = icon("circle-question")
+          ),
           uiOutput("ui_table")
         ),
         shinydashboardPlus::box(
@@ -62,7 +70,12 @@ app_ui <- function(request) {
               ),
               align = "center"
             ),
-            icon = icon("cog")
+            hr(),
+            div(p(HTML('<b>Note:</b>')),
+                p(HTML("<b>*:</b> ICD code maps to PheCode:XXX.X, but not to PheCode:XXX.X's parent (Rollup = 0)"), style="text-indent:10px"),
+                p(HTML("<b>**:</b> ICD code maps to PheCode:XXX.XX, but not to PheCode:XXX.XX's parent (Rollup = 0)"), style="text-indent:10px"),
+                style = "padding: 0 10px;width: 320px;"),
+            icon = icon("circle-question")
           ),
           uiOutput("ui_sunb")
         ),
