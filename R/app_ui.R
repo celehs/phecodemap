@@ -9,7 +9,7 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic 
     shinydashboardPlus::dashboardPage(
-      shinydashboardPlus::dashboardHeader(title = "PheCode to ICD map",
+      shinydashboardPlus::dashboardHeader(title = "Phecode to ICD map",
                       leftUi = tagList(
                         # includeCSS("www/style.css"),
                         actionButton("instruct", " About",
@@ -129,7 +129,7 @@ golem_add_external_resources <- function(){
     favicon(ext = 'png'),
     bundle_resources(
       path = app_sys('app/www'),
-      app_title = 'PheCode to ICD map'
+      app_title = 'Phecode to ICD map'
     )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert() 
