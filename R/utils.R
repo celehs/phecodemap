@@ -138,6 +138,8 @@ buildPath <- function(rootid, icdmap, dict_icd) {
 
 addClass <- function(rootid, icdmap, dict_icd, df_highlight = df_highlight){
   node <- buildPath(rootid, icdmap, dict_icd)
+  node <- addAsterisk(node)
+  node <- addGroups(node, icdmap)
   nodes_color <- node[order(node$ids), c("ids", "labels")]
   nodes_color$newid <- nodes_color$labels
 
@@ -167,8 +169,6 @@ addClass <- function(rootid, icdmap, dict_icd, df_highlight = df_highlight){
       nodes1$class[nodes1$labels == i] <- paste0(i, "(only ", df_highlight$ICD_version[df_highlight$Phecode == i], ")")
     }
   }
-  node <- addAsterisk(node)
-  node <- addMinus(node)
   return(list(node, nodes1, nodes2))
 }
 
@@ -189,11 +189,13 @@ addColor <- function(nodes_list, plot = "tree"){
   nodes1 <- dplyr::left_join(nodes1, df_color, by = "class")
   if (plot == "tree"){
     nodes2$color <- "none"
-    minus <- node$ids[grepl("-$", node$labels)]
-    nodes1$color[nodes1$ids %in% minus] <- "#F5F5F5"
+    
   } else{
     nodes2 <- dplyr::left_join(nodes2, nodes1[, c("labels", "color")], by = "labels", keep = FALSE)
   }
+  # groups <- node$ids[grepl("G:", node$labels)]
+  # nodes1$color[nodes1$ids %in% groups & grepl("ICD-9", nodes1$ids)] <- "blue"
+  # nodes1$color[nodes1$ids %in% groups & grepl("ICD-10-cm", nodes1$ids)] <- "green"
   node <- node[!duplicated(node),]
   nodes1 <- nodes1[!duplicated(nodes1),]
   nodes2 <- nodes2[!duplicated(nodes2),]
@@ -258,9 +260,9 @@ treePlot <- function(nodes_list, maxd = 4, collapsed = FALSE) {
   df_plot$ids[df_plot$ids %in% asterisk_ids2] <- paste0(df_plot$ids[df_plot$ids %in% asterisk_ids2], "**")
   df_plot$parents[df_plot$parents %in% asterisk_ids1] <- paste0(df_plot$parents[df_plot$parents %in% asterisk_ids1], "*")
   df_plot$parents[df_plot$parents %in% asterisk_ids2] <- paste0(df_plot$parents[df_plot$parents %in% asterisk_ids2], "**")
-  minus_ids1 <- df_plot$ids[grepl("\\-$", df_plot$labels, perl = TRUE)]
-  df_plot$ids[df_plot$ids %in% minus_ids1] <- paste0(df_plot$ids[df_plot$ids %in% minus_ids1], "-")
-  df_plot$parents[df_plot$parents %in% minus_ids1] <- paste0(df_plot$parents[df_plot$parents %in% minus_ids1], "-")
+  # groups_ids1 <- df_plot$ids[grepl("G:", df_plot$labels, fixed = TRUE)]
+  # df_plot$ids[df_plot$ids %in% groups_ids1] <- paste0("G:", df_plot$ids[df_plot$ids %in% groups_ids1])
+  # df_plot$parents[df_plot$parents %in% groups_ids1] <- paste0("G:", df_plot$parents[df_plot$parents %in% groups_ids1])
   collapsibleTree::collapsibleTreeNetwork(df_plot,
                          attribute = "labels", fill = "color",
                          collapsed = collapsed, tooltip = TRUE,
@@ -375,21 +377,39 @@ addAsterisk <- function(node){
   node[, 1:6]
 }
 
-addMinus <- function(node){
-  # node <- nodes_list[[1]]
-  # node$labels <- gsub("-", "", node$labels, fixed = TRUE)
-  node$phe <- gsub("^.*Phe\\:([\\d\\.]+)/ICD.+$", "\\1", node$parents, perl = TRUE)
-  node$phe[!grepl("ICD", node$parents)] <- NA
-  node$ICD_version <- gsub(".+(ICD\\-\\d+[\\-cm]*).*", "\\1", node$parents, perl = TRUE)
-  node$ICD_version[!grepl("ICD", node$parents)] <- NA
-  node$ICD_p <- gsub("^.+/([\\w\\.]+)$", "\\1", node$parents, perl = TRUE)
-  node$ICD_p[grepl("Phe", node$ICD_p)] <- NA
-  node <- dplyr::left_join(node, icdmap[, c(1,2,4)], by = c("ICD_version", "ICD_p" = "ICD_id"))
-  node$labels[duplicated(node$ids)][1]
-  minus <- node[!is.na(node$Phecode) & node$phe == node$Phecode, ]
-  minus <- node$parents[!node$parents %in% minus$parents]
-  node$labels[!grepl("Phe|ICD", node$labels, perl = TRUE) & node$ids %in% minus] <- paste0(node$labels[!grepl("Phe|ICD", node$labels, perl = TRUE) & node$ids %in% minus], "-")
-  node[, 1:6]
+addGroups  <- function(node, icdmap = icdmap){
+  groups <- node$parents[grepl("ICD.+/.+", node$parents, perl = TRUE)]
+  node$labels[node$ids %in% groups] <- paste0("G:", node$labels[node$ids %in% groups])
+  
+  node$Phecode <- gsub(".+/(Phe:[\\w\\.]+)/ICD.+/.+", "\\1", node$ids, perl = TRUE)
+  node$Phecode[!grepl("/ICD.+/.+", node$ids, perl = TRUE)] <- NA
+
+  node$group <- gsub("[G:]|\\*", "", node$labels)
+  node$group[!grepl("G:", node$labels)] <- NA
+  icdmap$Phecode <- paste0("Phe:", icdmap$Phecode)
+  node <- dplyr::left_join(node, icdmap[, c("ICD_id", "Phecode")], by = c("group" = "ICD_id"), relationship =
+                             "many-to-many")
+  # a <- node[node$ids %in% node$ids[duplicated(node$ids)], ]
+  # a$remove <- a$Phecode.x != a$Phecode.y
+  # a <- a[order(a$ids, a$remove), ]
+  
+  node$remove <- node$Phecode.x != node$Phecode.y
+  node <- node[order(node$ids, node$remove), ]
+  node <- node[!duplicated(node$ids), ]
+  ## group1 & code ====
+  a <- node[!is.na(node$remove) & !node$remove, ]
+  a$parents <- paste0(a$parents, "/", a$group)
+  a$ids <- paste0(a$parents, "/C:", a$group)
+  a$labels <- gsub("G:", "", a$labels)
+  ## group2 ====
+  b <- node[grepl("G:", node$labels) & !(!is.na(node$remove) & !node$remove), ]
+  
+  node$labels[grepl("G:", node$labels)] <- gsub("*", "", node$labels[grepl("G:", node$labels)], fixed = TRUE)
+  node$strs[grepl("G:", node$labels)] <- paste0("Group: ", node$strs[grepl("G:", node$labels)])
+  
+  node <- rbind(node, a)
+  node[order(node$ids), 1:6]
+
 }
 
 
