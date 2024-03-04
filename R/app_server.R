@@ -125,12 +125,7 @@ app_server <- function(Uniq_id, url_va){
   })
   
   
-  height_tree <- reactive({
-    node <- nodes_list()[[1]]
-    filtered_node <- node[sapply(
-      node$ids, filterNode, input$maxd_tree), ]
-    paste0(sqrt(nrow(filtered_node)) * 150, "px")
-  })
+  
   
   output$ui_sunb <- renderUI({
     if (is.null(input$table_phe_rows_selected)) {
@@ -143,23 +138,6 @@ app_server <- function(Uniq_id, url_va){
       ), type = 5)
     }
   })
-
-  output$ui_tree <- renderUI({
-    if (is.null(input$table_phe_rows_selected)) {
-        "Select 1 row in the table, Please."
-    } else {
-      shinycssloaders::withSpinner(
-        collapsibleTree::collapsibleTreeOutput(
-          "tree",
-          width = "100%",
-          height = height_tree()
-      ), type = 5)
-    }
-  })
-  
-  output$tree <- collapsibleTree::renderCollapsibleTree({
-    treePlot(nodes_list(), input$maxd_tree)
-  })
   
   df_sunb <- reactive({
     dfSunburst(nodes_list())
@@ -168,6 +146,87 @@ app_server <- function(Uniq_id, url_va){
   output$sunburst <- plotly::renderPlotly({
     sunburstPlotly(rootid(), df_sunb(), input$maxd_sunburst)
   })
+  
+  
+  ## tree ====
+  
+  
+  
+  # output$tree <- collapsibleTree::renderCollapsibleTree({
+  #   treePlot(nodes_list(), input$maxd_tree)
+  # })
+  
+  
+  
+  
+  ### clicked ====
+  dedupe <- function(rexpr, domain = getDefaultReactiveDomain()) {
+    force(rexpr)
+    x <- reactiveVal()
+    observe({
+      x(tryCatch(
+        {
+          list(success = rexpr())
+        },
+        error = function(e) {
+          list(error = e)
+        }
+      ))
+    }, domain = domain)
+    
+    reactive({
+      result <- x()
+      if (!is.null(result$success))
+        result$success
+      else
+        stop(result$error)
+    })
+  }
+  
+  
+  clicked <- reactive({
+    if(isTruthy(input$treenode) && length(input$treenode) >= 4 && isTruthy(input$treenode$`4`)){
+      # print("**********************")
+      # print("input$treenode")
+      # print(input$treenode)
+      # print(input$treenode$`4`)
+      input$treenode$`4`
+    } else {
+      "root"
+    }
+  }) %>% dedupe()
+  
+  observe({
+    print("clicked()")
+    print(clicked())
+    if(is.null(input$treenode) | (isTruthy(clicked()) & !clicked() %in% "root")){
+      
+      df_plot_tree <- dfPlot(nodes_list(), plot = "tree", clicked(), input$maxd_tree)
+      
+      height_tree <- paste0(sqrt(nrow(df_plot_tree)) * 150, "px")
+      
+      output$ui_tree <- renderUI({
+        if (is.null(input$table_phe_rows_selected)) {
+          "Select 1 row in the table, Please."
+        } else {
+          shinycssloaders::withSpinner(
+            collapsibleTree::collapsibleTreeOutput(
+              "tree",
+              width = "100%",
+              height = height_tree
+            ), type = 5)
+        }
+      })
+      
+      print("isTruthy(clicked()) && !clicked() %in% root")
+      output$tree <- collapsibleTree::renderCollapsibleTree({
+        treePlot(df_plot_tree, clicked(), input$maxd_tree)
+      })
+    } 
+  })
+  
+  
+    
 
   output$ui_legend <- renderUI({
     if (is.null(input$table_phe_rows_selected)) {

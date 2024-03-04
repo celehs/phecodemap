@@ -203,7 +203,7 @@ addColor <- function(nodes_list, plot = "tree"){
 }
 
 
-dfPlot <- function(nodes_list, plot = "tree"){
+dfPlot <- function(nodes_list, plot = "tree", clicked = NULL, maxd = NULL){
 
   nodes_list <- addColor(nodes_list, plot)
 
@@ -216,6 +216,18 @@ dfPlot <- function(nodes_list, plot = "tree"){
   df_plot <- dplyr::left_join(df_plot, nodes_color[, c("ids", "newid")], by = c("parents" = "ids"))
   df_plot <- df_plot[, c(10, 7, 1, 3, 2, 6, 8, 9)]
   colnames(df_plot) <- c("parents", "ids", "nodepath", "parentpath", "labels", "info", "class","color")
+  
+  
+  if(plot == "tree"){
+    df_plot1 <- df_plot
+    df_plot <- df_plot[sapply(df_plot$nodepath, filterNode, maxd), ]
+    if(!is.null(clicked) && clicked %in% df_plot$ids){
+      nodepath <- df_plot$nodepath[df_plot$ids == clicked]
+      df_plot2 <- df_plot1[grepl(nodepath, df_plot1$parentpath), ]
+      df_plot <- rbind(df_plot, df_plot2)
+      df_plot <- df_plot[order(df_plot$nodepath), ]
+    }
+  }
   return(df_plot)
 }
 
@@ -250,9 +262,8 @@ sunburstPlotly <- function(centernode, df_plot, maxd = 10) {
     ))
 }
 
-treePlot <- function(nodes_list, maxd = 4, collapsed = FALSE) {
-  df_plot <- dfPlot(nodes_list, plot = "tree")
-  df_plot <- df_plot[sapply(df_plot$nodepath, filterNode, maxd), ]
+treePlot <- function(df_plot, clicked = NULL, maxd = 4, collapsed = FALSE) {
+  
   asterisk_ids1 <- df_plot$ids[grepl("\\w\\*$", df_plot$labels, perl = TRUE)]
   asterisk_ids2 <- df_plot$ids[grepl("\\w\\*{2}$", df_plot$labels, perl = TRUE)]
   
@@ -264,9 +275,11 @@ treePlot <- function(nodes_list, maxd = 4, collapsed = FALSE) {
   # df_plot$ids[df_plot$ids %in% groups_ids1] <- paste0("G:", df_plot$ids[df_plot$ids %in% groups_ids1])
   # df_plot$parents[df_plot$parents %in% groups_ids1] <- paste0("G:", df_plot$parents[df_plot$parents %in% groups_ids1])
   collapsibleTree::collapsibleTreeNetwork(df_plot,
-                         attribute = "labels", fill = "color",
-                         collapsed = collapsed, tooltip = TRUE,
-                         tooltipHtml = "info", width = "100%", height = 1000
+                                          inputId = "treenode",
+                         attribute = "info", fill = "color",
+                         collapsed = collapsed, # tooltip = TRUE,
+                         # tooltipHtml = "info", 
+                         width = "100%", height = 1000
   )
 }
 
