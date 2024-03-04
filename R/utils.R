@@ -248,6 +248,7 @@ sunburstPlotly <- function(centernode, df_plot, maxd = 10) {
           labels =~ labels,
           parents =~ parents,
           hovertext =~ info,
+          level = "",
           maxdepth = maxd,
           marker = list(colors = df_plot$color,
                         line = list(color = df_plot$linecolor #,

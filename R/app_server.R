@@ -117,15 +117,13 @@ app_server <- function(Uniq_id, url_va){
     gsub("\\..+", "", icdmap$Phecode[s_line], perl = TRUE)
   })
   
-  # render plot -----------------------
-  
   nodes_list <- reactive({
     print(rootid())
     addClass(rootid(), icdmap, dict_icd, df_highlight)
   })
   
   
-  
+  ## sunb ====
   
   output$ui_sunb <- renderUI({
     if (is.null(input$table_phe_rows_selected)) {
@@ -192,7 +190,7 @@ app_server <- function(Uniq_id, url_va){
       # print(input$treenode$`4`)
       input$treenode$`4`
     } else {
-      "root"
+      ""
     }
   }) %>% dedupe()
   
@@ -222,6 +220,16 @@ app_server <- function(Uniq_id, url_va){
       output$tree <- collapsibleTree::renderCollapsibleTree({
         treePlot(df_plot_tree, clicked(), input$maxd_tree)
       })
+      
+      
+      plotly::plotlyProxy("sunburst", session) %>%
+          plotly::plotlyProxyInvoke(
+              "update",
+              list(
+                level = clicked()
+              )
+            )
+      
     } 
   })
   
