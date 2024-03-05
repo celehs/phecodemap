@@ -18,6 +18,22 @@ The PheCode classification is hierarchical. It includes broader disease codes th
 The same PheCode hierarchy is displayed in two ways: as a sunburst plot and as a tree. Select a code or a phenotype to display the relevant classification and hierarchical structure. For clarity and to allow comparison, ICD-9 and ICD-10 codes are shown in separate colors. By default, the plots are centered around the top code, that has no parent code. One can click on the child code of interest to collapse/expand the subcodes.
 
 
+### Notes
+
+1. table
+
+    - **Rollup**: Whether or not ICDs mapped to this code also map to this code's parents.For example, if rollup is 1, an ICD that maps to the phecode 008.11 will also map to the phecodes 008.1 and 008.
+
+2. plots
+
+    - **\*:** ICD code maps to PheCode:XXX.X, but not to PheCode:XXX.X's parent (Rollup = 0)
+    
+    - **\*\*:** ICD code maps to PheCode:XXX.XX, but not to PheCode:XXX.XX's parent (Rollup = 0)
+    
+    - **G:** ICD Groups.
+
+
+
 
 ## References
 
