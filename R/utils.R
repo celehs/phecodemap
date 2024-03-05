@@ -284,16 +284,62 @@ treePlot <- function(df_plot, clicked = NULL, maxd = 4, collapsed = FALSE) {
   )
 }
 
-legends <- function(df_sunb){
+legends <- function(df_sunb, selected_phe){
   df <- delDupRow(df_sunb[, c("class", "color")])
-  df <- df[df$class != "dupnode",]
+  df <- df[!df$class %in% c("dupnode", "ICD-9", "ICD-10-cm"),]
   df <- df[order(df$class),]
-  options(repr.plot.width=6, repr.plot.height=18)
-  par(mar=c(1,1,1,1))
-  plot(NULL ,xaxt='n',yaxt='n',bty='n',ylab='',xlab='', xlim=0:1, ylim=0:1)
-  graphics::legend("top", legend =df$class, pch=16, pt.cex=3, cex=1.2, bty='n',
-         y.intersp=1.5, ncol=2,
-         col = df$color)
+  
+  tr_legends <- ""
+  for(i in 1:nrow(df)){
+    if(i %% 2 == 1){
+      td <- sprintf('</tr><tr class="small-row">
+    <td class="dot" style="color: %s;"><i class="fas fa-circle"></i></td>
+    <td>%s</td>', df$color[i], df$class[i])
+    } else {
+      td <- sprintf('<td class="dot" style="color: %s;"><i class="fas fa-circle"></i></td>
+    <td>%s</td>', df$color[i], df$class[i])
+    }
+    tr_legends <- paste0(tr_legends, td)
+  }
+  
+  
+  tagList(
+    HTML(sprintf(
+        '<p> Phenotype: 
+        %s 
+        </p>
+         <div class="table-container">   
+          <table id = "tb-legend">
+          <colgroup>
+            <col class="first-col">
+            <col>
+            <col class="third-col">
+            <col>
+          </colgroup>
+          <tr class="small-row">
+            <td class="dot" style="color: lightblue;"><i class="fas fa-circle"></i></td>
+            <td>ICD-9</td>
+            <td class="dot" style="color: palegreen;"><i class="fas fa-circle"></i></td>
+            <td>ICD-10-cm</td>
+          </tr>
+    
+          %s
+          
+          </tr><tr>
+            <td colspan="4"><b><big>*</big>:</b> ICD code maps to PheCode:XXX.X, but not to PheCode:XXX.X\'s parent (Rollup = 0)</td>
+            </tr>
+          <tr>
+            <td colspan="4"><b><big>**</big>:</b> ICD code maps to PheCode:XXX.XX, but not to PheCode:XXX.XX\'s parent (Rollup = 0)</td>
+          </tr>
+          <tr>
+            <td colspan="4"><b>G:</b> ICD Groups.</td>
+          </tr>
+        </table>
+      </div>',
+      selected_phe,
+      tr_legends
+    ))
+  )
 }
 
 delDupRow <- function(x, cols = 1:ncol(x)) {

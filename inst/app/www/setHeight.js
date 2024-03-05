@@ -34,7 +34,8 @@ setHeight = function() {
   var boxHeight = $("#box_table").height();
   
   $("#box_legend").height(boxHeight);
-  $("#ui_legend").height(boxHeight - 20);
+  // $("#ui_legend").height(boxHeight - 20);
+  $(".table-container").height(boxHeight - 100);
 };
 
 setInterval("setObservation('box_table')", 500)

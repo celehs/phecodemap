@@ -70,11 +70,6 @@ app_ui <- function(request) {
               ),
               align = "center"
             ),
-            hr(),
-            div(p(HTML('<b>Note:</b>')),
-                p(HTML("<b>*:</b> ICD code maps to PheCode:XXX.X, but not to PheCode:XXX.X's parent (Rollup = 0)"), style="text-indent:10px"),
-                p(HTML("<b>**:</b> ICD code maps to PheCode:XXX.XX, but not to PheCode:XXX.XX's parent (Rollup = 0)"), style="text-indent:10px"),
-                style = "padding: 0 10px;width: 320px;"),
             icon = icon("circle-question")
           ),
           uiOutput("ui_sunb")

@@ -70,3 +70,32 @@
   overflow-y: hidden
 }
  
+ 
+.table-container {
+            overflow: auto;
+            margin-top: 15px;
+        }
+#tb-legend{
+  width: 95%; 
+  border-collapse: collapse;
+}
+#tb-legend > th, td {
+        padding: 8px;
+        text-align: left;
+        border: none;
+        text-align:left;
+    }
+
+.small-row td {
+            padding: 2px;
+        }
+    
+#tb-legend > .dot {
+        width: 20px;
+        height: 20px;
+        font-size: 14px;
+    }
+ .first-col, .third-col {
+        width: 25px;
+    }
+ 

@@ -66,7 +66,6 @@ app_server <- function(Uniq_id, url_va){
   
   output$table_phe <- DT::renderDT(
     DT::datatable({
-      print(paste("inputrow()", inputrow(), "selectPage", inputrow() %/% 8 + 1))
       icdmap[, c(4, 5, 1:3, 6)]},
               extensions = "Scroller",
               colnames = c(
@@ -146,17 +145,6 @@ app_server <- function(Uniq_id, url_va){
   })
   
   
-  ## tree ====
-  
-  
-  
-  # output$tree <- collapsibleTree::renderCollapsibleTree({
-  #   treePlot(nodes_list(), input$maxd_tree)
-  # })
-  
-  
-  
-  
   ### clicked ====
   dedupe <- function(rexpr, domain = getDefaultReactiveDomain()) {
     force(rexpr)
@@ -184,19 +172,14 @@ app_server <- function(Uniq_id, url_va){
   
   clicked <- reactive({
     if(isTruthy(input$treenode) && length(input$treenode) >= 4 && isTruthy(input$treenode$`4`)){
-      # print("**********************")
-      # print("input$treenode")
-      # print(input$treenode)
-      # print(input$treenode$`4`)
       input$treenode$`4`
     } else {
       ""
     }
   }) %>% dedupe()
   
+  ## tree ====
   observe({
-    print("clicked()")
-    print(clicked())
     if(is.null(input$treenode) | (isTruthy(clicked()) & !clicked() %in% "root")){
       
       df_plot_tree <- dfPlot(nodes_list(), plot = "tree", clicked(), input$maxd_tree)
@@ -216,7 +199,6 @@ app_server <- function(Uniq_id, url_va){
         }
       })
       
-      print("isTruthy(clicked()) && !clicked() %in% root")
       output$tree <- collapsibleTree::renderCollapsibleTree({
         treePlot(df_plot_tree, clicked(), input$maxd_tree)
       })
@@ -234,53 +216,15 @@ app_server <- function(Uniq_id, url_va){
   })
   
   
-    
-
+  ## legend ====
   output$ui_legend <- renderUI({
     if (is.null(input$table_phe_rows_selected)) {
-        "Select 1 row in the table, Please."
+      "Select 1 row in the table, Please."
     } else {
-      tagList(
-        paste0("Phenotype: ", icdmap$Phenotype[input$table_phe_rows_selected]),
-        
-        shinycssloaders::withSpinner(
-          plotOutput("out_legend", height = "300px"), 
-          type = 5)
-      )
+      legends(df_sunb(), icdmap$Phenotype[input$table_phe_rows_selected])
     }
   })
   
-  output$out_legend <- renderPlot(legends(df_sunb()))
-  
-  # box title ====
-  
-  # output$box_title <- renderText({
-  #   if(is.null(input$table_phe_rows_selected)){
-  #     "Legend"
-  #   } else {
-  #     paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])
-  #   }
-  # })
-  # 
-  # output$legend_btn <- renderUI({
-  #   if(is.null(Uniq_id) || is.null(input$table_phe_rows_selected)){
-  #     "Legend"
-  #   } else {
-  #     center <- paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])
-  #     href <- paste0(url_va, uniq_id()$uqid[uniq_id()$id == center])
-  #     
-  #    actionButton("tova",
-  #                 class = "btn-primary active", width = "157px",
-  #                 icon = icon("share"),
-  #                 title = "Link back to CIPHER.",
-  #                 style = "margin: 0 0 0 20px;",
-  #                 tags$a("View in CIPHER", 
-  #                        href = href, 
-  #                        target = "_blank"))
-  #   }
-  #     
-  #   
-  # })
   
   output$box_title <- renderUI({
     if(is.null(Uniq_id) || is.null(input$table_phe_rows_selected)){
@@ -288,8 +232,7 @@ app_server <- function(Uniq_id, url_va){
     } else {
       center <- paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])
       href <- paste0(url_va, uniq_id()$uqid[uniq_id()$id == center])
-      # HTML(paste0(center, " ",
-      #             "<p><a href=\"", href, "\">View in CIPHER</a></p>"))
+      
       htmltools::p(center,
         actionButton("tova",
                      class = "btn-primary active", width = "157px",
@@ -302,26 +245,7 @@ app_server <- function(Uniq_id, url_va){
 
     }
   })
-  
-  # btn back to VA ====
-  
-  # observeEvent(input$table_phe_rows_selected, {
-  #     uqid <- uniq_id()$uqid[uniq_id()$id == paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])]
-  #     print(uqid)
-  #     # href <- paste0("https://phenomics-dev.va.ornl.gov/cipher/phenotype-viewer?uqid=", uqid)
-  #     href <- paste0(url_va, uqid)
-  #     output$toVA <- renderUI({
-  #       
-  #       actionButton("tova",
-  #                    class = "btn-primary active", width = "157px",
-  #                    icon = icon("share"),
-  #                    title = "Link back to CIPHER.",
-  #                    style = "margin: 8px 10px 0px 0px;",
-  #                    tags$a("View in CIPHER", 
-  #                           href = href, 
-  #                           target = "_blank"))
-  #   })
-  # })
+
   
   # read uqid file ====
   
