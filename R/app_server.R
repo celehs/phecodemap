@@ -116,6 +116,11 @@ app_server <- function(Uniq_id, url_va){
     gsub("\\..+", "", icdmap$Phecode[s_line], perl = TRUE)
   })
   
+  selected_icd <- reactive({
+    req(input$table_phe_rows_selected)
+    icdmap$ICD_id[input$table_phe_rows_selected]
+  })
+  
   nodes_list <- reactive({
     print(rootid())
     addClass(rootid(), icdmap, dict_icd, df_highlight)
@@ -137,7 +142,8 @@ app_server <- function(Uniq_id, url_va){
   })
   
   df_sunb <- reactive({
-    dfSunburst(nodes_list())
+    print(selected_icd())
+    dfSunburst(nodes_list(), selected_icd())
   })
   
   output$sunburst <- plotly::renderPlotly({
@@ -182,7 +188,7 @@ app_server <- function(Uniq_id, url_va){
   observe({
     if(is.null(input$treenode) | (isTruthy(clicked()) & !clicked() %in% "root")){
       
-      df_plot_tree <- dfPlot(nodes_list(), plot = "tree", clicked(), input$maxd_tree)
+      df_plot_tree <- dfPlot(nodes_list(), selected_icd(), plot = "tree", clicked(), input$maxd_tree)
       
       height_tree <- paste0(sqrt(nrow(df_plot_tree)) * 150, "px")
       

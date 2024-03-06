@@ -174,19 +174,34 @@ addClass <- function(rootid, icdmap, dict_icd, df_highlight = df_highlight){
 
 
 
-addColor <- function(nodes_list, plot = "tree"){
+
+addColor <- function(nodes_list, selected_icd, plot = "tree"){
 
   node <- nodes_list[[1]]
   nodes1 <- nodes_list[[2]]
   nodes2 <- nodes_list[[3]]
 
+  ## highlight Selected ICD ====
+  selected <- nodes1$ids[gsub("*", "", nodes1$labels, fixed = TRUE) == selected_icd]
+  selected_phe <- gsub("ICD.+", "", selected)
+  selected_G <- paste0("G:", getParents(selected_icd, dict_icd))
+  selected_ids <- nodes1$ids[grepl(selected_phe, nodes1$ids) & gsub("*", "", nodes1$labels) %in% selected_G]
+  selected_ids <- unique(c(selected_ids, selected))
+  nodes1$class[nodes1$ids %in% selected_ids] <- "selected ICD"
+  
+
   df_color <- data.frame(class = unique(nodes1$class), color = "")
   df_color$color[df_color$class == "ICD-9"] <- colorlist[1]
   df_color$color[df_color$class == "ICD-10-cm"] <- colorlist[2]
   df_color$color[!df_color$class %in% c("ICD-9", "ICD-10-cm")] <- colorlist[4:(nrow(df_color[!df_color$class %in% c("ICD-9", "ICD-10-cm"),])+3)]
-
+  
   df_color$color[grepl("only", df_color$class)] <- colorlist[3]
+  
+  df_color$color[grepl("selected", df_color$class)] <- ifelse(grepl("ICD-9", selected), "#377EB8", "#4DAF4A")
+  
   nodes1 <- dplyr::left_join(nodes1, df_color, by = "class")
+  
+  
   if (plot == "tree"){
     nodes2$color <- "none"
     
@@ -203,9 +218,9 @@ addColor <- function(nodes_list, plot = "tree"){
 }
 
 
-dfPlot <- function(nodes_list, plot = "tree", clicked = NULL, maxd = NULL){
+dfPlot <- function(nodes_list, selected_icd, plot = "tree", clicked = NULL, maxd = NULL){
 
-  nodes_list <- addColor(nodes_list, plot)
+  nodes_list <- addColor(nodes_list, selected_icd, plot)
 
   node <- nodes_list[[1]]
   nodes1 <- nodes_list[[2]]
@@ -231,8 +246,8 @@ dfPlot <- function(nodes_list, plot = "tree", clicked = NULL, maxd = NULL){
   return(df_plot)
 }
 
-dfSunburst <- function(nodes_list){
-  df_plot <- dfPlot(nodes_list, plot = "sunb")
+dfSunburst <- function(nodes_list, selected_icd){
+  df_plot <- dfPlot(nodes_list, selected_icd, plot = "sunb")
   df_plot$linecolor <- df_plot$color
   dup_nodes <- df_plot$labels[grep("Phe", df_plot$labels)]
   dup_nodes <- unique(dup_nodes[duplicated(dup_nodes)])
@@ -286,7 +301,8 @@ treePlot <- function(df_plot, clicked = NULL, maxd = 4, collapsed = FALSE) {
 
 legends <- function(df_sunb, selected_phe){
   df <- delDupRow(df_sunb[, c("class", "color")])
-  df <- df[!df$class %in% c("dupnode", "ICD-9", "ICD-10-cm"),]
+  color_selected_icd <- df$color[df$class == "selected ICD"]
+  df <- df[!df$class %in% c("selected ICD", "ICD-9", "ICD-10-cm", "dupnode"),]
   df <- df[order(df$class),]
   
   tr_legends <- ""
@@ -316,6 +332,14 @@ legends <- function(df_sunb, selected_phe){
             <col class="third-col">
             <col>
           </colgroup>
+          
+          <tr class="small-row">
+            <td class="dot" style="color: 
+            %s
+            ;"><i class="fas fa-circle"></i></td>
+            <td>selected ICD</td>
+          </tr>
+          
           <tr class="small-row">
             <td class="dot" style="color: lightblue;"><i class="fas fa-circle"></i></td>
             <td>ICD-9</td>
@@ -337,6 +361,7 @@ legends <- function(df_sunb, selected_phe){
         </table>
       </div>',
       selected_phe,
+      color_selected_icd,
       tr_legends
     ))
   )
