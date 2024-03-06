@@ -30,7 +30,7 @@ The same PheCode hierarchy is displayed in two ways: as a sunburst plot and as a
     
     - **\*\*:** ICD code maps to PheCode:XXX.XX, but not to PheCode:XXX.XX's parent (Rollup = 0)
     
-    - **G:** ICD Groups.
+    - **G:** ICD node with a prefix **G:** indicates ICD group that include children ICD codes, and can be expanded.
 
 
 

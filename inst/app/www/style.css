@@ -79,16 +79,22 @@
   width: 95%; 
   border-collapse: collapse;
 }
-#tb-legend > th, td {
-        padding: 8px;
+#tb-legend > tbody > tr > td {
         text-align: left;
         border: none;
+        /*border: 1px solid black;*/
         text-align:left;
     }
 
-.small-row td {
+.small-row > td {
             padding: 2px;
         }
+        
+.big-row > td {
+  
+        padding: 8px 2px 8px 2px;
+}
+        
     
 #tb-legend > .dot {
         width: 20px;
@@ -98,4 +104,9 @@
  .first-col, .third-col {
         width: 25px;
     }
+    
+.strong{
+  color: red;
+  font-weight: bold;
+}
  
