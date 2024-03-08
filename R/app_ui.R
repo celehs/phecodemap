@@ -70,7 +70,7 @@ app_ui <- function(request) {
               ),
               align = "center"
             ),
-            icon = icon("circle-question")
+            icon = icon("cog")
           ),
           uiOutput("ui_sunb")
         ),

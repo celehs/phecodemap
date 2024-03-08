@@ -353,11 +353,11 @@ legends <- function(df_sunb, selected_phe){
           
           </tr><tr class="big-row">
             <td><span class = "strong"><big>*</big></span></td>
-            <td colspan="3"> ICD code maps to PheCode:XXX.X, but not to PheCode:XXX.X\'s parent (Rollup = 0)</td>
+            <td colspan="3"> ICD code maps to PheCode:XXX.X, but not to parent PheCode:XXX (Rollup = 0)</td>
             </tr>
           <tr class="big-row">
             <td><span class = "strong"><big>**</big></span></td>
-            <td colspan="3"> ICD code maps to PheCode:XXX.XX, but not to PheCode:XXX.XX\'s parent (Rollup = 0)</td>
+            <td colspan="3"> ICD code maps to PheCode:XXX.XX, but not to parent PheCode:XXX.X (Rollup = 0)</td>
           </tr>
           <tr class="big-row">
             <td><span class = "strong">G:</span></td>
