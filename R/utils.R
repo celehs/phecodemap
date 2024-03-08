@@ -55,18 +55,20 @@ buildPath <- function(rootid, icdmap, dict_icd) {
   
   
   
-  removeP <- function(x, p, all_ids){
-    x[x == p | p == "" | (!x %in% all_ids)] <- ""
+  
+  removeP <- function(x, p, node, all_ids){
+    x[x == node| x == p | p == "" | (!x %in% all_ids)] <- ""
     x
   }
   
   getPath4 <- function(node, all_ids, depth = NULL){
-    p0 = gsub("\\..+", "", node)
-    p1 <- removeP(gsub("^(.+\\..).*$", "\\1", node, perl = TRUE), p0, all_ids)
-    p2 <- removeP(gsub("^(.+\\...).*$", "\\1", node, perl = TRUE), p1, all_ids)
-    p3 <- removeP(gsub("^(.+\\....).*$", "\\1", node, perl = TRUE), p2, all_ids)
-    p4 <- removeP(node, p3, all_ids)
-    parents <- paste(p0, p1, p2, p3, p4, sep = "/")
+    p0 = removeP(gsub("\\..+", "", node), node, node, all_ids)
+    p1 <- removeP(gsub("^(.+\\..).*$", "\\1", node, perl = TRUE), p0, node, all_ids)
+    p2 <- removeP(gsub("^(.+\\...).*$", "\\1", node, perl = TRUE), p1, node, all_ids)
+    p3 <- removeP(gsub("^(.+\\....).*$", "\\1", node, perl = TRUE), p2, node, all_ids)
+    p4 <- removeP(gsub("^(.+\\.....).*$", "\\1", node, perl = TRUE), p2, node, all_ids)
+    parents <- paste(p0, p1, p2, p3, p4, node, sep = "/")
+    parents <- gsub("^/+", "", parents, perl = TRUE)
     parents <- gsub("/+$", "", parents, perl = TRUE)
     parents <- gsub("//+", "/", parents, perl = TRUE)
     parents
@@ -485,17 +487,21 @@ addGroups  <- function(node, icdmap = icdmap){
   node <- node[order(node$ids, node$remove), ]
   node <- node[!duplicated(node$ids), ]
   ## group1 & code ====
-  a <- node[!is.na(node$remove) & !node$remove, ]
-  a$parents <- paste0(a$parents, "/", a$group)
-  a$ids <- paste0(a$parents, "/C:", a$group)
-  a$labels <- gsub("G:", "", a$labels)
+  if(sum(!is.na(node$remove) & !node$remove)>0){
+    a <- node[!is.na(node$remove) & !node$remove, ]
+    a$parents <- paste0(a$parents, "/", a$group)
+    a$ids <- paste0(a$parents, "/C:", a$group)
+    a$labels <- gsub("G:", "", a$labels)
+    node <- rbind(node, a)
+  }
+  
   ## group2 ====
-  b <- node[grepl("G:", node$labels) & !(!is.na(node$remove) & !node$remove), ]
+  # b <- node[grepl("G:", node$labels) & !(!is.na(node$remove) & !node$remove), ]
   
   node$labels[grepl("G:", node$labels)] <- gsub("*", "", node$labels[grepl("G:", node$labels)], fixed = TRUE)
   node$strs[grepl("G:", node$labels)] <- paste0("Group: ", node$strs[grepl("G:", node$labels)])
   
-  node <- rbind(node, a)
+  
   node[order(node$ids), 1:6]
 
 }
