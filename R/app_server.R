@@ -66,7 +66,10 @@ app_server <- function(Uniq_id, url_va){
   
   output$table_phe <- DT::renderDT(
     DT::datatable({
-      icdmap[, c(4, 5, 1:3, 6)]},
+      df <- icdmap[, c(4, 5, 1:3, 6)]
+      df$Rollup <- as.character(df$Rollup)
+      df
+      },
               extensions = "Scroller",
               colnames = c(
                 "ICD Description" = "ICD_str",
@@ -81,6 +84,7 @@ app_server <- function(Uniq_id, url_va){
                 pageLength = 8,
                 # stateSave = TRUE,
                 # displayStart = inputrow(),
+                displayStart = inputrow() - 1,
                 dom = "tp",
                 columns = list(
                   list(width = "80px" ),
