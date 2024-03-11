@@ -199,7 +199,7 @@ addColor <- function(nodes_list, selected_icd, plot = "tree"){
   
   df_color$color[grepl("only", df_color$class)] <- colorlist[3]
   
-  df_color$color[grepl("selected", df_color$class)] <- ifelse(grepl("ICD-9", selected), "#377EB8", "#4DAF4A")
+  df_color$color[grepl("Selected ICD", df_color$class)] <- ifelse(grepl("ICD-9", selected), "#377EB8", "#4DAF4A")
   
   nodes1 <- dplyr::left_join(nodes1, df_color, by = "class")
   
