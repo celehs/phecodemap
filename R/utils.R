@@ -282,16 +282,6 @@ sunburstPlotly <- function(centernode, df_plot, maxd = 10) {
 
 treePlot <- function(df_plot, clicked = NULL, maxd = 4, collapsed = FALSE) {
   
-  asterisk_ids1 <- df_plot$ids[grepl("\\w\\*$", df_plot$labels, perl = TRUE)]
-  asterisk_ids2 <- df_plot$ids[grepl("\\w\\*{2}$", df_plot$labels, perl = TRUE)]
-  
-  df_plot$ids[df_plot$ids %in% asterisk_ids1] <- paste0(df_plot$ids[df_plot$ids %in% asterisk_ids1], "*")
-  df_plot$ids[df_plot$ids %in% asterisk_ids2] <- paste0(df_plot$ids[df_plot$ids %in% asterisk_ids2], "**")
-  df_plot$parents[df_plot$parents %in% asterisk_ids1] <- paste0(df_plot$parents[df_plot$parents %in% asterisk_ids1], "*")
-  df_plot$parents[df_plot$parents %in% asterisk_ids2] <- paste0(df_plot$parents[df_plot$parents %in% asterisk_ids2], "**")
-  # groups_ids1 <- df_plot$ids[grepl("G:", df_plot$labels, fixed = TRUE)]
-  # df_plot$ids[df_plot$ids %in% groups_ids1] <- paste0("G:", df_plot$ids[df_plot$ids %in% groups_ids1])
-  # df_plot$parents[df_plot$parents %in% groups_ids1] <- paste0("G:", df_plot$parents[df_plot$parents %in% groups_ids1])
   collapsibleTree::collapsibleTreeNetwork(df_plot,
                                           inputId = "treenode",
                          attribute = "info", fill = "color",
@@ -353,11 +343,11 @@ legends <- function(df_sunb, selected_phe){
           
           </tr><tr class="big-row">
             <td><span class = "strong"><big>*</big></span></td>
-            <td colspan="3"> ICD code maps to PheCode:XXX.X, but not to parent PheCode:XXX (Rollup = 0)</td>
+            <td colspan="3"> The ICD code maps solely to Phecode XXX.XX or XXX.X, and not its parent Phecode</td>
             </tr>
           <tr class="big-row">
             <td><span class = "strong"><big>**</big></span></td>
-            <td colspan="3"> ICD code maps to PheCode:XXX.XX, but not to parent PheCode:XXX.X (Rollup = 0)</td>
+            <td colspan="3"> The ICD code maps to Phecode XXX.XX and parent PheCode XXX.X but not to XXX</td>
           </tr>
           <tr class="big-row">
             <td><span class = "strong">G:</span></td>
@@ -453,17 +443,10 @@ addAsterisk <- function(node){
   # node <- nodes_list[[1]]
   # nodes1 <- nodes_list[[2]]
   # nodes2 <- nodes_list[[3]]
-  node$labels_p <- gsub("^.*Phe\\:([\\d\\.]+)/ICD.+$", "\\1", node$parents, perl = TRUE)
-  node$labels_p[!grepl("ICD", node$parents)] <- NA
-  node$ICD_version <- gsub(".+(ICD\\-\\d+[\\-cm]*).*", "\\1", node$parents, perl = TRUE)
-  node$ICD_version[!grepl("ICD", node$parents)] <- NA
-  node <- dplyr::left_join(node, icdmap[, c(1,2,4,6)], by = c("ICD_version", "labels" = "ICD_id", "labels_p" = "Phecode"))
-  if(sum(grepl(0, node$Rollup)) >0 ){
-    node$asterisk <- NA
-    node$asterisk[node$Rollup %in% 0] <- "*"
-    node$asterisk[node$Rollup %in% 0 & grepl("\\.\\d\\d", node$labels_p, perl = TRUE)] <- "**"
-    node$labels[!is.na(node$asterisk)] <- paste0(node$labels[!is.na(node$asterisk)], node$asterisk[!is.na(node$asterisk)])
-  }
+  node$phecode <- gsub(".+/Phe:([\\w\\.]+)/ICD.+/.+", "\\1", node$ids, perl = TRUE)
+  node$labels[node$phecode %in% start1] <- paste0(node$labels[node$phecode %in% start1], "*")
+  node$labels[node$phecode %in% start2] <- paste0(node$labels[node$phecode %in% start2], "**")
+  
   node[, 1:6]
 }
 
