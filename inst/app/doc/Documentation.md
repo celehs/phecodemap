@@ -26,11 +26,11 @@ The same Phecode hierarchy is displayed in two ways: as a sunburst plot and as a
 
 2. Plots
 
-    - **\*:** The ICD code maps solely to Phecode XXX.XX or XXX.X, and not its parent Phecode
+    - **\*:** The ICD code maps exclusively to a specific Phecode (XXX.XX or XXX.X) and not its parent Phecode
     
-    - **\*\*:** The ICD code maps to Phecode XXX.XX and parent Phecode XXX.X but not to XXX
+    - **\*\*:** The ICD code maps to both Phecode XXX.XX and its parent Phecode XXX.X, but does not map to XXX
     
-    - **G:** ICD node with a prefix **G:** indicates ICD group that include children ICD codes, and can be expanded.
+    - **G:** ICD node with a prefix **G:** indicates ICD group that include children ICD codes, and can be expanded
 
 
 

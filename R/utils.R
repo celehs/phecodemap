@@ -343,15 +343,15 @@ legends <- function(df_sunb, selected_phe){
           
           </tr><tr class="big-row">
             <td><span class = "strong"><big>*</big></span></td>
-            <td colspan="3"> The ICD code maps solely to Phecode XXX.XX or XXX.X, and not its parent Phecode</td>
+            <td colspan="3"> The ICD code maps exclusively to a specific Phecode (XXX.XX or XXX.X) and not its parent Phecode</td>
             </tr>
           <tr class="big-row">
             <td><span class = "strong"><big>**</big></span></td>
-            <td colspan="3"> The ICD code maps to Phecode XXX.XX and parent Phecode XXX.X but not to XXX</td>
+            <td colspan="3"> The ICD code maps to both Phecode XXX.XX and its parent Phecode XXX.X, but does not map to XXX</td>
           </tr>
           <tr class="big-row">
             <td><span class = "strong">G:</span></td>
-            <td colspan="3"> ICD node with a prefix <b>G:</b> indicates ICD group that include children ICD codes, and can be expanded.</td>
+            <td colspan="3"> ICD node with a prefix <b>G:</b> indicates ICD group that include children ICD codes, and can be expanded</td>
           </tr>
         </table>
       </div>',
