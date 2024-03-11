@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 ## Overview
 
 The phecodemap package builds a shiny app to visualize the hierarchy of 
-PheCode Mapping with ICD-9 and ICD-10-cm. The same PheCode hierarchy is 
+Phecode Mapping with ICD-9 and ICD-10-cm. The same Phecode hierarchy is 
 displayed in two ways: as a sunburst plot and as a tree.
 
 ## Installation
@@ -33,8 +33,8 @@ displayed in two ways: as a sunburst plot and as a tree.
 Install development version from GitHub:
 
 ```{r eval=FALSE}
-install.packages("remotes")
-remotes::install_github("celehs/phecodemap")
+install.packages("remotes", character.only = TRUE)
+remotes::install_github("celehs/phecodemap", character.only = TRUE)
 ```
 
 

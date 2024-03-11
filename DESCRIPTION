@@ -1,8 +1,8 @@
 Package: phecodemap
-Title: Visualization for PheCode Mapping with ICD-9 and ICD-10-cm Codes
+Title: Visualization for Phecode Mapping with ICD-9 and ICD-10-cm Codes
 Version: 0.2.0
 Authors@R: person('Parse', 'Health', email = 'contact@parse-health.org', role = c('cre', 'aut'))
-Description: Phecodemap builds a shiny app to visualize the hierarchy of PheCode Mapping with ICD. The same PheCode hierarchy is displayed in two ways: as a sunburst plot and as a tree.
+Description: Phecodemap builds a shiny app to visualize the hierarchy of Phecode Mapping with ICD. The same Phecode hierarchy is displayed in two ways: as a sunburst plot and as a tree.
 License: GPL (>= 3)
 Imports: 
     collapsibleTree,

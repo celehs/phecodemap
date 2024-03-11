@@ -189,7 +189,7 @@ addColor <- function(nodes_list, selected_icd, plot = "tree"){
   selected_G <- paste0("G:", getParents(selected_icd, dict_icd))
   selected_ids <- nodes1$ids[grepl(selected_phe, nodes1$ids) & gsub("*", "", nodes1$labels) %in% selected_G]
   selected_ids <- unique(c(selected_ids, selected))
-  nodes1$class[nodes1$ids %in% selected_ids] <- "selected ICD"
+  nodes1$class[nodes1$ids %in% selected_ids] <- "Selected ICD"
   
 
   df_color <- data.frame(class = unique(nodes1$class), color = "")
@@ -293,8 +293,8 @@ treePlot <- function(df_plot, clicked = NULL, maxd = 4, collapsed = FALSE) {
 
 legends <- function(df_sunb, selected_phe){
   df <- delDupRow(df_sunb[, c("class", "color")])
-  color_selected_icd <- df$color[df$class == "selected ICD"]
-  df <- df[!df$class %in% c("selected ICD", "ICD-9", "ICD-10-cm", "dupnode"),]
+  color_selected_icd <- df$color[df$class == "Selected ICD"]
+  df <- df[!df$class %in% c("Selected ICD", "ICD-9", "ICD-10-cm", "dupnode"),]
   df <- df[order(df$class),]
   
   tr_legends <- ""
@@ -329,7 +329,7 @@ legends <- function(df_sunb, selected_phe){
             <td class="dot" style="color: 
             %s
             ;"><i class="fas fa-circle"></i></td>
-            <td>selected ICD</td>
+            <td>Selected ICD</td>
           </tr>
           
           <tr class="small-row">
@@ -347,7 +347,7 @@ legends <- function(df_sunb, selected_phe){
             </tr>
           <tr class="big-row">
             <td><span class = "strong"><big>**</big></span></td>
-            <td colspan="3"> The ICD code maps to Phecode XXX.XX and parent PheCode XXX.X but not to XXX</td>
+            <td colspan="3"> The ICD code maps to Phecode XXX.XX and parent Phecode XXX.X but not to XXX</td>
           </tr>
           <tr class="big-row">
             <td><span class = "strong">G:</span></td>

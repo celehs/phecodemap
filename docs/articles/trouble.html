@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phecodemap</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -55,7 +57,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://celehs.github.io">CELEHS Software</a>
+  <a href="https://celehs.github.io" class="external-link">CELEHS Software</a>
 </li>
       </ul>
 </div>
@@ -67,38 +69,43 @@
 
       
 
-      </header><script src="trouble_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Troubleshooting</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/celehs/phecodemap.git/blob/master/vignettes/trouble.Rmd"><code>vignettes/trouble.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/celehs/phecodemap.git/blob/HEAD/vignettes/trouble.Rmd" class="external-link"><code>vignettes/trouble.Rmd</code></a></small>
       <div class="hidden name"><code>trouble.Rmd</code></div>
 
     </div>
 
     
     
-<div id="lazy-load-database-rdb-is-corrupt" class="section level3">
-<h3 class="hasAnchor">
-<a href="#lazy-load-database-rdb-is-corrupt" class="anchor"></a>lazy-load database ‘…rdb’ is corrupt</h3>
+<div class="section level3">
+<h3 id="lazy-load-database-rdb-is-corrupt">lazy-load database ‘…rdb’ is corrupt<a class="anchor" aria-label="anchor" href="#lazy-load-database-rdb-is-corrupt"></a>
+</h3>
 <p>Try the following method and re-install the package.</p>
 <ol style="list-style-type: decimal">
-<li><p>Try restarting your R session (e.g. .rs.restartR() if in RStudio)</p></li>
-<li><p>The package might have been installed in your computer (even though it does not work). Remove it using ?remove.packages()</p></li>
+<li><p>Try restarting your R session (e.g. .rs.restartR() if in
+RStudio)</p></li>
+<li><p>The package might have been installed in your computer (even
+though it does not work). Remove it using ?remove.packages()</p></li>
 </ol>
-<p><a href="https://stackoverflow.com/questions/30424608/error-in-fetchkey-lazy-load-database" class="uri">https://stackoverflow.com/questions/30424608/error-in-fetchkey-lazy-load-database</a></p>
+<p><a href="https://stackoverflow.com/questions/30424608/error-in-fetchkey-lazy-load-database" class="external-link uri">https://stackoverflow.com/questions/30424608/error-in-fetchkey-lazy-load-database</a></p>
 </div>
-<div id="error-converted-from-warning-package-shiny-was-build-under-r-version" class="section level3">
-<h3 class="hasAnchor">
-<a href="#error-converted-from-warning-package-shiny-was-build-under-r-version" class="anchor"></a>Error: (converted from warning) package ‘shiny’ was build under R version …</h3>
-<p>Error converted from warning prevents package install when dependency was built under newer R version.</p>
-<p>Setting R_REMOTES_NO_ERRORS_FROM_WARNINGS=“false” will cause warning messages during calls to install.packages() to become errors.</p>
+<div class="section level3">
+<h3 id="error-converted-from-warning-package-shiny-was-build-under-r-version">Error: (converted from warning) package ‘shiny’ was build under R
+version …<a class="anchor" aria-label="anchor" href="#error-converted-from-warning-package-shiny-was-build-under-r-version"></a>
+</h3>
+<p>Error converted from warning prevents package install when dependency
+was built under newer R version.</p>
+<p>Setting R_REMOTES_NO_ERRORS_FROM_WARNINGS=“false” will cause warning
+messages during calls to install.packages() to become errors.</p>
 <p>Try run the following code and re-install the package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span><span class="op">(</span><span class="st">"R_REMOTES_NO_ERRORS_FROM_WARNINGS"</span> <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span></code></pre></div>
-<p><a href="https://github.com/r-lib/remotes/issues/403" class="uri">https://github.com/r-lib/remotes/issues/403</a></p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span><span class="st">"R_REMOTES_NO_ERRORS_FROM_WARNINGS"</span> <span class="op">=</span> <span class="st">"true"</span><span class="op">)</span></span></code></pre></div>
+<p><a href="https://github.com/r-lib/remotes/issues/403" class="external-link uri">https://github.com/r-lib/remotes/issues/403</a></p>
 </div>
   </div>
 
@@ -111,11 +118,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Parse Health.</p>
+  <p></p>
+<p>Developed by Parse Health.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -123,6 +132,8 @@
 
   
 
+
+  
 
   </body>
 </html>

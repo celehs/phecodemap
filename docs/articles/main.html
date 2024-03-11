@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">phecodemap</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -55,7 +57,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://celehs.github.io">CELEHS Software</a>
+  <a href="https://celehs.github.io" class="external-link">CELEHS Software</a>
 </li>
       </ul>
 </div>
@@ -67,52 +69,60 @@
 
       
 
-      </header><script src="main_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>App instructions</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/celehs/phecodemap.git/blob/master/vignettes/main.Rmd"><code>vignettes/main.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/celehs/phecodemap.git/blob/HEAD/vignettes/main.Rmd" class="external-link"><code>vignettes/main.Rmd</code></a></small>
       <div class="hidden name"><code>main.Rmd</code></div>
 
     </div>
 
     
     
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
-<p>The phecodemap package builds a shiny app to visualize the hierarchy of PheCode Mapping with ICD-9 and ICD-10-cm. The same PheCode hierarchy is displayed in two ways: as a sunburst plot and as a tree.</p>
-<p>There are 5 parts in the website: header, input table, legend, sunburst, tree plot.</p>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p>The phecodemap package builds a shiny app to visualize the hierarchy
+of Phecode Mapping with ICD-9 and ICD-10-cm. The same Phecode hierarchy
+is displayed in two ways: as a sunburst plot and as a tree.</p>
+<p>There are 5 parts in the website: header, input table, legend,
+sunburst, tree plot.</p>
 <p><img src="0.app.png"></p>
-<div id="header" class="section level3">
-<h3 class="hasAnchor">
-<a href="#header" class="anchor"></a>header</h3>
+<div class="section level3">
+<h3 id="header">header<a class="anchor" aria-label="anchor" href="#header"></a>
+</h3>
 <ul>
 <li>About: The instructions of the app.</li>
 <li>Help: The step-by-step introduction of the app.</li>
 </ul>
-<p>The documentations of the <code>About</code> and <code>Help</code> are in inst/app/doc.</p>
+<p>The documentations of the <code>About</code> and <code>Help</code>
+are in inst/app/doc.</p>
 </div>
-<div id="input-table" class="section level3">
-<h3 class="hasAnchor">
-<a href="#input-table" class="anchor"></a>Input table</h3>
-<p>First of all, click a row in the input table. You can also enter some items in the filtering bar for each column (phenotype, ICD description etc.) to spot on your targets. Once a row are selected, the app will automatically display the hierarchy with the selected phecode as root node in the sunburst and tree plot.</p>
+<div class="section level3">
+<h3 id="input-table">Input table<a class="anchor" aria-label="anchor" href="#input-table"></a>
+</h3>
+<p>First of all, click a row in the input table. You can also enter some
+items in the filtering bar for each column (phenotype, ICD description
+etc.) to spot on your targets. Once a row are selected, the app will
+automatically display the hierarchy with the selected phecode as root
+node in the sunburst and tree plot.</p>
 <p><img src="1.table.png"></p>
 </div>
-<div id="sunburst" class="section level3">
-<h3 class="hasAnchor">
-<a href="#sunburst" class="anchor"></a>sunburst</h3>
+<div class="section level3">
+<h3 id="sunburst">sunburst<a class="anchor" aria-label="anchor" href="#sunburst"></a>
+</h3>
 <ul>
 <li>Hover on a wedge to see the label of the code.</li>
 <li>Click on a wedge to expand/collaspe the hierarchy.</li>
 </ul>
 <p><img src="phe_sunburst.gif"></p>
 </div>
-<div id="tree-plot" class="section level3">
-<h3 class="hasAnchor">
-<a href="#tree-plot" class="anchor"></a>tree plot</h3>
+<div class="section level3">
+<h3 id="tree-plot">tree plot<a class="anchor" aria-label="anchor" href="#tree-plot"></a>
+</h3>
 <ul>
 <li>Hover on a node to see the label of the code.</li>
 <li>Click on a node to expand/collaspe the subtree.</li>
@@ -134,11 +144,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Parse Health.</p>
+  <p></p>
+<p>Developed by Parse Health.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -146,6 +158,8 @@
 
   
 
+
+  
 
   </body>
 </html>

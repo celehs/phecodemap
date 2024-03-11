@@ -40,7 +40,7 @@ app_server <- function(Uniq_id, url_va){
       }
     } else if(grepl('phecode=', url_vars())){
       id = gsub(".+?phecode=(.+)", "\\1", url_vars(), perl = TRUE)
-      paste0("PheCode:", id)
+      paste0("Phecode:", id)
     }
   })
   
@@ -48,10 +48,10 @@ app_server <- function(Uniq_id, url_va){
     if(isTruthy(url_node())){
         url_node()
       } else {
-        c("PheCode:008")
+        c("Phecode:008")
       }
   })
-  
+  phecode$Phecode <- gsub("PheCode:", "Phecode:", phecode$Phecode, fixed = TRUE)
   inputrow <- reactive({
     phecode$row[match(phe_id(), phecode$Phecode)]
   })
@@ -240,7 +240,7 @@ app_server <- function(Uniq_id, url_va){
     if(is.null(Uniq_id) || is.null(input$table_phe_rows_selected)){
       "Legend"
     } else {
-      center <- paste0("PheCode:", icdmap$Phecode[input$table_phe_rows_selected])
+      center <- paste0("Phecode:", icdmap$Phecode[input$table_phe_rows_selected])
       href <- paste0(url_va, uniq_id()$uqid[uniq_id()$id == center])
       
       htmltools::p(center,
@@ -266,7 +266,7 @@ app_server <- function(Uniq_id, url_va){
         df_uqid$uqid <- as.character(df[[i]])
       } else if(sum(!grepl("^[\\w\\:\\.\\-]+$", df[[i]], perl = TRUE)) == 0){
         df_uqid$id <- df[[i]]
-        df_uqid$id[grepl("_", df_uqid$id)] <- gsub("Phe_", "PheCode:", df_uqid$id[grepl("_", df_uqid$id)])
+        df_uqid$id[grepl("_", df_uqid$id)] <- gsub("Phe_", "Phecode:", df_uqid$id[grepl("_", df_uqid$id)])
         df_uqid$id[grepl("_", df_uqid$id)] <- gsub("_", ".", df_uqid$id[grepl("_", df_uqid$id)])
       }
     }

@@ -20,8 +20,8 @@
 ## 
 golem::fill_desc(
   pkg_name = "phecodemap", # The Name of the package containing the App 
-  pkg_title = "Visualization for PheCode Mapping with ICD-9 and ICD-10-cm Codes", # The Title of the package containing the App 
-  pkg_description = "Phecodemap builds a shiny app to visualize the hierarchy of PheCode Mapping with ICD. The same PheCode hierarchy is displayed in two ways: as a sunburst plot and as a tree.", # The Description of the package containing the App 
+  pkg_title = "Visualization for Phecode Mapping with ICD-9 and ICD-10-cm Codes", # The Title of the package containing the App 
+  pkg_description = "Phecodemap builds a shiny app to visualize the hierarchy of Phecode Mapping with ICD. The same Phecode hierarchy is displayed in two ways: as a sunburst plot and as a tree.", # The Description of the package containing the App 
   author_first_name = "Celehs", # Your First Name
   author_last_name = "VA MVP", # Your Last Name
   author_email = "AUTHOR@MAIL.COM", # Your Email

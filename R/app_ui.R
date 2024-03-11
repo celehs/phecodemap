@@ -32,7 +32,7 @@ app_ui <- function(request) {
         includeCSS(app_sys("app/www/style.css")),
         shinydashboardPlus::box(
           width = 8, id = "box_table",
-          title = "PheCode Mapping with ICD-9 and ICD-10-cm Codes",
+          title = "Phecode Mapping with ICD-9 and ICD-10-cm Codes",
           status = "primary",
           align = "center", # collapsible = TRUE,
           dropdownMenu = shinydashboardPlus::boxDropdown(

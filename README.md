@@ -12,7 +12,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 ## Overview
 
 The phecodemap package builds a shiny app to visualize the hierarchy of
-PheCode Mapping with ICD-9 and ICD-10-cm. The same PheCode hierarchy is
+Phecode Mapping with ICD-9 and ICD-10-cm. The same Phecode hierarchy is
 displayed in two ways: as a sunburst plot and as a tree.
 
 ## Installation
